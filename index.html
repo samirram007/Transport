@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/transport.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transport</title>
+  <!-- <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script> -->
+  <style>
+    .portal {
+      @apply fixed top-0 left-0 z-[10000] bg-red-500 flex flex-col justify-center items-center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <div id="portal" class="portal"></div>
+  <div id="portal-form" class="portal"></div>
+  <div id="document-portal" class="portal"></div>
+
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>

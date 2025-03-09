@@ -1,0 +1,10 @@
+  
+input[type="date" i] {
+    @apply dark:text-blue-400;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    @apply  filter dark:invert;
+    color: #60a5fa; /* This may not work in some browsers */
+    opacity: 1;
+} 

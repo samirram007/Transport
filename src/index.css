@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.5rem;
+    }
+    .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 210 40% 98%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 212.7 26.8% 83.9%;
+        --chart-1: 220 70% 50%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+    }
+}
+@layer base {
+    * {
+        @apply m-0 p-0;
+        box-sizing: border-box;
+        font-size: 1rem;
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+    .my-toast {
+        min-height: 50px;
+        padding: 0.3rem 0.7rem;
+        margin-bottom: -30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        @apply animate-out;
+        animation: slideInFromBottom 0.5s ease-out;
+    }
+    .grid-reverse {
+        direction: rtl;
+    }
+    @keyframes slideInFromRight {
+        0% {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    @keyframes slideInFromRight2 {
+        0% {
+            transform: translateX(30%);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    /* Scrollbar Track */
+    ::-webkit-scrollbar {
+        @apply w-[8px] h-[8px];
+        @apply bg-transparent transition-all duration-1000 ease-in-out; /* Color of the thumb */
+        @apply hover:bg-gradient-to-b from-transparent via-zinc-100/90 to-transparent rounded-full;
+        @apply dark:hover:bg-gradient-to-b from-transparent via-blue-500/30 to-transparent rounded-full;
+    }
+
+    /* Scrollbar Thumb (Draggable Part) */
+    ::-webkit-scrollbar-thumb {
+        @apply h-[20px];
+        @apply bg-gradient-to-b from-transparent via-blue-500 to-transparent rounded-full;
+        @apply dark:bg-gradient-to-b from-transparent via-blue-500 to-transparent rounded-full; /* Softer, blended color */
+        @apply rounded-full; /* Fully rounded for smooth look */
+        @apply cursor-move shadow-lg; /* Add a bit of shadow */
+        @apply hover:bg-slate-700/60 dark:hover:bg-teal-200/50 dark:hover:border-2 border-red-500; /* Slightly darker on hover */
+        @apply hover:bg-slate-700/60 dark:hover:bg-teal-200/50 dark:hover:border-2 border-red-500; /* Slightly darker on hover */
+        @apply transition-all duration-300 ease-in-out; /* Smooth transition */
+    }
+
+    /* Scrollbar Track (Background) */
+    ::-webkit-scrollbar-track {
+        @apply bg-transparent; /* Keeps it minimal */
+    }
+
+    .btn {
+        @apply font-bold text-xl py-2 px-6 rounded-full;
+        @apply m-1;
+        @apply border-2;
+    }
+    .btn:hover {
+        @apply bg-slate-950 text-whiten;
+    }
+    .btn:active {
+        @apply bg-slate-700 text-whiten;
+    }
+    .btn-sm {
+        /* @apply font-bold py-1 px-2 rounded; */
+    }
+
+    .form-group {
+        @apply grid grid-cols-[200px_1fr]   items-center gap-1.5;
+    }
+    .semi-group {
+        @apply grid grid-cols-[100px_1fr]     items-center gap-1.5;
+    }
+    .form-input {
+        @apply w-full p-2 border border-border rounded-md;
+        @apply bg-background text-foreground;
+    }
+    .form-select {
+        @apply w-full p-2 border border-border rounded-md;
+        /* @apply w-full  input mb-0 input-bordered border-zinc-700 dark:border-zinc-500 input-primary ; */
+    }
+}
