@@ -1,58 +1,16 @@
-
-
-import { DateTime } from 'luxon';
-import { useMemo } from 'react';
-
-
-import { useNavigate } from 'react-router';
-
-import moment from 'moment';
-import { useExpenses } from '../hooks/queries';
-import CreateExpense from './Create';
-import Delete from './Delete';
-import Edit from './Edit';
-import ExpenseTable from './ExpenseTable';
+import { lazy } from 'react';
 
 
 
-const initialValues = {
-  expense_no: '',
-  expense_date: new Date(),
-  academic_session_id: moment(new Date()).format('YYYY'),
-  campus_id: 1,
-  user_id: null,
-  total_amount: 0,
-  paid_amount: 0,
-  balance_amount: 0,
-  payment_mode: 'CASH'
-}
+import ExpenseContextProvider from '../contexts/ExpenseContextProvider';
+import DisplayCard from './DisplayCard';
 
-const currentDate = moment(new Date()).format('YYYY-MM-DD');
-const firstDayOfYear = moment(new Date(new Date().getFullYear(), 0, 1)).format('YYYY-MM-DD'); // January 1st of the current year
+const FilterTable = lazy(() => import('./FilterTable'))
 
-const initialFilterValues = {
-  campus_id: initialValues.campus_id,
-  academic_session_id: initialValues.academic_session_id,
-  from: firstDayOfYear, // 'YYYY-MM-DD' format for first day of the year
-  to: currentDate  // 'YYYY-MM-DD' format for current date
-};
-// const initialFilterValues = {
-//   campus_id: initialValues.campus_id,
-//   academic_session_id: initialValues.academic_session_id,
-//    from:new Date().toISOString().split('T')[0],
-//    to:new Date().toISOString().split('T')[0]
-// }
-// console.log(initialFilterValues)
+
+
 const DataTable = () => {
 
-  // const formattedDate = new Date().toString('yyyy-MM-dd');
-
-  // console.log('Date',formattedDate);
-  const ExpenseData = useExpenses(initialFilterValues)
-  const navigate = useNavigate()
-
-  const mData = ExpenseData.data?.data ?? [];
-  const data = useMemo(() => [...mData], [mData]);
 
   /** @type {import('@tanstack/react-table').ColumnDef<any>} */
   const columns = [
@@ -63,64 +21,33 @@ const DataTable = () => {
       size: 50,
 
     },
-    {
-      header: "Expense No",
-      accessorKey: "expense_no",
 
-    },
-    {
-      header: "Date",
-      accessorKey: "expense_date",
-      cell: info =>
-        DateTime.fromISO(info.getValue()).toLocaleString(DateTime.DATE_MED),
+    { header: "Expense No", accessorKey: "expenseNo", },
+    { header: "Expense Date", accessorKey: "expenseDate", },
+    { header: "Rider", accessorKey: "rider.name", id: 'rider' },
+    { header: "School", accessorKey: "rider.school.name", id: 'school' },
+    { header: "Fiscal Year", accessorKey: "fiscalYear.name", id: 'fiscalYear' },
 
-    },
-    {
-      header: "Campus",
-      accessorKey: "campus.name",
-    },
 
     {
-      header: "Session",
-      accessorKey: "academic_session.session",
-
-    },
-    {
-      header: "Amount",
-      accessorKey: "total_amount",
-
-    },
-
-    {
-      header: 'Action',
-      accessorKey: 'action',
-      align: 'center',
+      header: "Action", accessorKey: "action", size: 300, visible: true,
+      className: '    ',
       cell: ({ row }) => {
         return (
-          <div className="flex justify-start md:justify-center  items-center gap-2">
-            {/* <Print initialValues={row.original} /> */}
-            <Edit initialValues={row.original} />
-            <Delete initialValues={row.original} />
-
-          </div>
+          <ExpenseContextProvider mode="edit" selectedData={row.original}>
+            <DisplayCard />
+          </ExpenseContextProvider>
         )
       }
-    }
+    },
+
 
   ]
+
+
   return (
-
-
-    <ExpenseTable
-      data={data}
-      columns={columns}
-      createForm={<CreateExpense modal={true} />}
-      createFormTitle={'Expense No: [new]'}
-      ExpenseData={ExpenseData}
-      initialFilterValues={initialFilterValues}
-
+    <FilterTable columns={columns}
     />
-
   )
 }
 

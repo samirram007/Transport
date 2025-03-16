@@ -1,56 +1,51 @@
 import { useMutation } from "@tanstack/react-query";
 
 
-import { queryClient } from "../../../utils/queryClient";
-import { deleteExpense, storeExpense, updateExpense } from "../services/apis";
 
-import { toast } from "sonner";
-import { useFormModal } from "../../../contexts/FormModalProvider";
+
+import { deleteExpenseService, storeExpenseService, updateExpenseService } from "../services/apis";
+
+
+import { queryClient } from "@/lib/queryClient";
+const moduleQueryKey = 'expenses'
 export function useStoreExpenseMutation() {
-  // const navigate = useNavigate()
-  const { setOpen } = useFormModal()
+
   return useMutation({
-    mutationFn: storeExpense,
+    mutationFn: storeExpenseService,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['expenses'] })
-      toast.success(data.message);
-      //navigate("/expenses", { replace: true })
-      setOpen(false)
+      queryClient.invalidateQueries({ queryKey: [moduleQueryKey] })
+
+
     },
     onError: (error) => {
-      toast.error(error.response.data.message)
+
     }
   })
-}
+} 
+
 export function useUpdateExpenseMutation() {
-  //const navigate = useNavigate()
-  const { setOpen } = useFormModal()
+
   return useMutation({
-    mutationFn: updateExpense,
+    mutationFn: updateExpenseService,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['expenses'] })
-      toast.success(data.message);
-      // navigate("/expenses", { replace: true })
-      setOpen(false)
+      queryClient.invalidateQueries({ queryKey: [moduleQueryKey] })
+
     },
     onError: (error) => {
-      toast.error(error.response.data.message)
+
     }
   })
 }
 export function useDeleteExpenseMutation() {
-  // const navigate = useNavigate()
-  const { setOpen } = useFormModal()
+
   return useMutation({
-    mutationFn: deleteExpense,
+    mutationFn: deleteExpenseService,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['expenses'] })
-      toast.success(data.message);
-      // navigate("/expenses", { replace: true })
-      setOpen(false)
+      queryClient.invalidateQueries({ queryKey: [moduleQueryKey] })
+
     },
     onError: (error) => {
-      toast.error(error.response.data.message)
+
     }
   })
 }

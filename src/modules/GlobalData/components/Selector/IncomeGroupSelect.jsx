@@ -7,10 +7,10 @@ export const IncomeGroupSelect = ({ formik,  name,label,exclude }) => {
 
 
     const IncomeGroupData = useIncomeGroups();
-    if (IncomeGroupData.isLoading) return <Loader />;
+    if (IncomeGroupData.isLoading) return <Loader className='animate-spin' />;
     return (
 
-        <CustomSelect formik={formik} name={name??"income_group_id"} label={label??'IncomeGroup'}
+        <CustomSelect formik={formik} name={name ?? "incomeGroupId"} label={label ?? 'Income Group'}
             options={IncomeGroupData.data && IncomeGroupData.data.data &&
                 IncomeGroupData.data.data.map(({ id: key, name: value }, index) => (
 
@@ -21,3 +21,8 @@ export const IncomeGroupSelect = ({ formik,  name,label,exclude }) => {
     );
 
 };
+
+
+
+
+

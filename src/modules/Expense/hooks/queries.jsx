@@ -1,24 +1,28 @@
 import { useQuery } from "@tanstack/react-query"
-import { fetchExpense, fetchExpenses } from "../services/apis"
+import { fetchExpenseService, fetchExpensesService, fetchSearchRiderForExpensesService } from "../services/apis"
 
-  export function useExpenses(payload) {
 
-    return useQuery({
-      queryKey: ['expenses','filter',payload],
-      queryFn: ()=>fetchExpenses(payload),
-      staleTime:1000*60,
-      enabled:!!payload
-    })
-  }
-  export function useExpense(id) {
-    return useQuery({
-      queryKey: ['expenses',id],
-      queryFn: ()=>fetchExpense(id),
-    })
-  }
-  export function useExpensesBySessionNClass(payload) {
-    return useQuery({
-      queryKey: ['expenses',payload],
-      queryFn: ()=>fetchExpensesBySessionNClass(payload),
-    })
-  }
+export function useExpenses(payload) {
+
+  return useQuery({
+    queryKey: ['expenses', 'filter', payload],
+    queryFn: () => fetchExpensesService(payload),
+    staleTime: 1000 * 60,
+    enabled: !!payload
+  })
+}
+export function useExpense(id) {
+  return useQuery({
+    queryKey: ['expenses', id],
+    queryFn: () => fetchExpenseService(id),
+  })
+}
+export function useSearchRiderForExpenses(payload) {
+  return useQuery({
+    queryKey: ['searchRiderForExpenses', payload],
+    queryFn: () => fetchSearchRiderForExpensesService(payload),
+    enabled: !!payload?.text?.length
+  })
+}
+
+

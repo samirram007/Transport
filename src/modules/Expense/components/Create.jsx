@@ -1,68 +1,61 @@
-import { Breadcrumb } from '@mui/material';
-import moment from 'moment';
-import { useState } from 'react';
-import EntryForm from './EntryForm';
 
- const Create = ({ modal }) => {
-  const [entryMode, setEntryMode] = useState('create');
+import FormikEmptyModal from '@/components/form-components/FormikEmptyModal';
+import { lazy, useEffect } from 'react';
+import { MdOutlineAddCircleOutline, MdOutlineCloseFullscreen } from 'react-icons/md';
+import { useExpenseContext } from '../contexts/features/useExpenseContext';
 
-  const editData = {
-    expense_no:'new',
-    expense_date:    moment(new Date()).format('YYYY-MM-DD'),
-    academic_session_id: moment(new Date()).format('YYYY'),
-    campus_id: 1,
-    user_id: null,
-    total_amount: 0,
-    paid_amount: 0,
-    balance_amount: 0,
-    payment_mode:'CASH',
-    expense_items:[]
+const Breadcrumb = lazy(() => import('../../../components/Breadcrumb'))
 
-  }
+const EntryForm = lazy(() => import('./EntryForm'))
+const Create = () => {
+    const { setAction, isModalOpen, setModalOpen } = useExpenseContext();
 
-  const initialValues = editData ?? {
-    expense_no:'new',
-    expense_date:     moment(new Date()).format('YYYY-MM-DD'),
-    academic_session_id: 1,
-    campus_id: 1,
-    user_id: null,
-    total_amount: 0,
-    paid_amount: 0,
-    balance_amount: 0,
-    payment_mode:'CASH',
-    expense_items:[]
-  }
+    const handleModalClose = () => {
+        setModalOpen(false)
+    }
+    useEffect(() => {
+        setAction('create')
+    }, [])
 
+    return (
+        <>
+            <button onClick={() => setModalOpen(true)}
+                className="cursor-pointer ">
 
+                <MdOutlineAddCircleOutline className='text-5xl text-teal-600 transition-all duration-500 ease-in-out cursor-pointer active:text-teal-300 active:scale-150 hover:text-teal-800' />
+            </button>
+            {isModalOpen &&
+                <FormikEmptyModal isModalOpen={isModalOpen} variant={'nav-screen'}  >
+                    <div className='w-full h-dvh  
+          grid grid-rows-[50px_1fr]  '>
 
-  return (
-      <div className='pb-10 w-full'>
-          {
-              !modal &&
+                        <div className=' py-1 px-2  h-[50px]'>
+                            <div className='flex items-center justify-between pb-1 border-b-2 border-slate-600/50' >
+                                <div className='text-xl font-bold' >
+                                    <div>Expense Collection</div>
+                                </div>
+                                <button onClick={handleModalClose} type="button"
+                                    className='p-2 text-orange-500 rounded-full cursor-pointer bg-slate-50/5 hover:text-yellow-500 hover:bg-slate-600 active:text-orange-600 active:touch-pinch-zoom '>
+                                    <MdOutlineCloseFullscreen className='text-xl transition ease-in-out delay-75 active:scale-90 ' />
+                                </button>
+                            </div>
+                        </div>
 
-              <div className='row  flex flex-col md:flex-row justify-between gap-2 border-b-2 border-blue-300/10 pb-2 mb-2 '>
-                  <div className='flex flex-col gap-2 flex-1 text-3xl'>
-                      {/* {'New FeeHead'} */}
-                      <Breadcrumb />
-                  </div>
-                  <div className='flex flex-row gap-2 flex-1'>
+                        <EntryForm />
 
-                  </div>
-                  <div className='flex flex-row gap-2 justify-center flex-1 items-center'>
+                    </div >
+                </FormikEmptyModal>
 
-                  </div>
-              </div>
-          }
-
-          <EntryForm
-          initialValues={initialValues}
-          entryMode={entryMode}
-           />
+            }
+        </>
 
 
-      </div>
-  )
+
+    )
 }
 
 
 export default Create
+
+
+

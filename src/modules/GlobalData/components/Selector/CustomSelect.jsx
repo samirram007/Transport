@@ -1,5 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { SelectNative } from "@/components/ui/select-native";
+import { lowerCase } from "@/lib/removeEmptyStrings";
 import { useId } from "react";
 
 export const CustomSelect = (
@@ -17,7 +18,7 @@ export const CustomSelect = (
                 className={`  ${formik.errors[name] ? 'select-error' : 'form-select'}`}
             >
                 <option value="" disabled>
-                    -- please select
+                    -- please select {lowerCase(label)} --
                 </option>
 
                 {props.options}

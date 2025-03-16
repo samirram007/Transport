@@ -4,10 +4,7 @@ import { deleteData, getData, postData, putData } from '@/lib/dataClient';
 const moduleApiPath = '/fees'
 export function fetchFeeService(id) {
 
-    return axiosClient.get(`${moduleApiPath}/${id}`)
-        .then(({ data }) => {
-            return data;
-        })
+    return getData(`${moduleApiPath}/${id}`)
 }
 export function fetchFeesService(payload) {
     const filterString = `fiscalYearId=${payload.fiscalYearId}&from=${payload.from}&to=${payload.to}`

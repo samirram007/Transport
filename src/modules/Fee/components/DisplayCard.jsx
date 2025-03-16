@@ -5,6 +5,7 @@ import { MdOutlineDateRange } from 'react-icons/md';
 import { useFeeContext } from '../contexts/features/useFeeContext';
 import { useFeeDataContext } from '../contexts/features/useFeeDataContext';
 import Edit from './Edit';
+import Print from './Print';
 const DisplayCard = () => {
   const { dataDisplay } = useFeeDataContext()
 
@@ -34,9 +35,10 @@ const TableBaseCard = () => {
       <div>{data.feeDate ? moment(data.feeDate).format('DD-MMM-YYYY') : 'N/A'}</div>
       <div>{data.rider ? data.rider?.name : 'N/A'} </div>
       <div>{data.rider?.school ? data.rider.school.name : 'N/A'} </div>
-      <div>{data.paidAmount ?? 'N/A'} </div>
+      <div>{
+        data.feeItems[0] ? (data.feeItems[0]?.amount + ' x ' + data.feeItems[0]?.quantity) : 'N/A'}</div>
       <div>{data.note ?? 'N/A'} </div>
-      <div className='text-center'>  {data && <Edit />} </div>
+      <div className='text-center'>  {data && <> <Edit /><Print feeId={data.id} /></>} </div>
 
     </>
 
@@ -71,7 +73,8 @@ const BaseCard = () => {
         <div className="flex min-w-full flex-col gap-2  items-start  max-h-[15rem] overflow-y-auto scrollbar-thin scrollbar-thumb-teal-500 scrollbar-track-teal-200">
           <InfoRow label="Rider" value={data.rider ? data.rider?.name : 'N/A'} />
           <InfoRow label="School" value={data.rider?.school ? data.rider.school.name : 'N/A'} />
-          <InfoRow label="Fee" value={data.paidAmount ?? 'N/A'} />
+            <InfoRow label="Fee" value={
+              data.feeItems[0] ? (data.feeItems[0]?.amount + ' x ' + data.feeItems[0]?.quantity) : 'N/A'} />
           <InfoRow label="Note" value={data.note ?? 'N/A'} />
 
           {/* <InfoRow label="DOB" value={moment(data.dob).format("DD-MM-YYYY")} />
@@ -92,6 +95,7 @@ const BaseCard = () => {
           <>
             {/* <Info/> */}
             <Edit />
+            <Print feeId={data.id} />
             {/* <Delete /> */}
           </>
         }
@@ -107,9 +111,9 @@ const BaseCard = () => {
 const InfoRow = ({ label, value }) => {
   return (
     <div className="text-sm text-gray-500 gap-1 grid grid-cols-[90px_5px_1fr]  ">
-      <div className='text-nowrap'>{label}</div>
+      <div className='text-nowrap text-slate-500'>{label}</div>
       <div> : </div>
-      <div className="pr-2 truncate whitespace-normal ">{value}</div>
+      <div className="pr-2 truncate whitespace-normal line-clamp-2 ">{value}</div>
     </div>
   );
 }

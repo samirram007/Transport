@@ -7,6 +7,7 @@ import { FormikInputBox } from '@/components/form-components/FormikInputBox';
 import { ImageBox } from '@/components/form-components/ImageBox';
 
 import { Button } from '@/components/ui/button';
+import { IncomeGroupSelect } from '@/modules/GlobalData/components/Selector/IncomeGroupSelect';
 import { Loader } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useFeeHeadContext } from '../context/features/useFeeHeadContext';
@@ -39,11 +40,8 @@ export default EntryForm
 const FormikForm = () => {
 
     const { selectedFeeHead: initialValues,
-        entryMode, action,
-        handleMutation, setModalOpen } = useFeeHeadContext()
-    const [isScrollable, setIsScrollable] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
-    const scrollableDivRef = useRef(null);
+        action,
+        handleMutation, setModalOpen } = useFeeHeadContext() 
 
     const formik = useFormik({
         initialValues,
@@ -83,6 +81,7 @@ const FormikForm = () => {
 
 
                         <FormikInputBox formik={formik} name="name" label="Name" />
+                        <IncomeGroupSelect formik={formik} />
 
 
                     </div>

@@ -98,12 +98,12 @@ const RecentFees = () => {
               </div>
               <div className="text-md ">
                 <div>
-                  {item.student.name}
+                  {item.rider.name}
                 </div>
                 <div className='flex flex-row gap-2 text-sm font-semibold text-pretty dark:text-blue-300 '>
-                  <div> {item.studentSession.academicClass.name}</div>
-                  <div>Section: {item.studentSession.section.name}</div>
-                  <div>Roll: {item.studentSession.rollNo ?? 'n/a'}</div>
+                  <div> {item.rider.standard}</div>
+                  <div>Section: {item.rider.section}</div>
+                  <div>Roll: {item.rider.rollNo ?? 'n/a'}</div>
                 </div>
               </div>
               <div className="font-bold text-right text-md">{item.totalAmount}</div>

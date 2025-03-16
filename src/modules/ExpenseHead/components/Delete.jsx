@@ -1,33 +1,69 @@
-import { useState } from 'react'
 
-import FormikEditFormModal from '@/components/form-components/FormikEditFormModal'
-import EntryForm from './EntryForm'
+import FormikEmptyModal from '@/components/form-components/FormikEmptyModal';
+import { Button } from '@/components/ui/button';
+import { MdOutlineCloseFullscreen } from 'react-icons/md';
+import { RiDeleteBin7Line } from 'react-icons/ri';
+import { useExpenseHeadContext } from '../context/features/useExpenseheadContext';
+import EntryForm from './EntryForm';
 
 
 
-const Delete = ({ initialValues }) => {
+const Delete = () => {
+  const { action, setAction, isModalOpen, setModalOpen } = useExpenseHeadContext();
 
-  const [isOpen, setOpen] = useState(false)
 
+
+  const handleModalClose = () => {
+    setModalOpen(false)
+  }
+
+  const handleOnClick = () => {
+    setModalOpen(true)
+    setAction('delete')
+  }
   return (
     <>
 
-      <button onClick={() => setOpen(true)}
-        className="btn btn-outline btn-primary btn-sm btn-rounded  ">
-        Delete
-      </button>
-      {isOpen &&
-        <FormikEditFormModal isOpen={isOpen} setOpen={setOpen} label="Delete Department">
+      <Button onClick={handleOnClick}
+        className="  w-15 h-15   bg-transparent  cursor-pointer  border-2 rounded-md box-border border-teal-600 flex flex-col items-center justify-center">
 
-          <EntryForm
-            initialValues={initialValues}
-            entryMode={'delete'} />
-        </FormikEditFormModal>
+        <RiDeleteBin7Line className='text-3xl text-teal-600 cursor-pointer
+                        transition-all duration-500 ease-in-out
+                        active:text-teal-300 active:scale-150
+                         hover:text-teal-800' />
+        <div>Delete</div>
+      </Button>
+      {isModalOpen && action === 'delete' &&
+        <FormikEmptyModal isModalOpen={isModalOpen} variant={'half'}  >
+          <div className='w-full  
+          grid grid-rows-[50px_1fr]  '>
+
+            <div className=' py-1 px-2  h-[50px]'>
+              <div className='flex justify-between items-center border-b-2 border-slate-600/50 pb-1' >
+                <div className='text-xl font-bold text-red-500' >
+                  <div>Delete ExpenseHead</div>
+                </div>
+                <button onClick={handleModalClose} type="button"
+                  className='rounded-full p-2
+                  bg-slate-50/5 text-orange-500 cursor-pointer
+                  hover:text-yellow-500 hover:bg-slate-600
+                  active:text-orange-600 active:touch-pinch-zoom '>
+                  <MdOutlineCloseFullscreen className='text-xl active:scale-90 transition delay-75 ease-in-out ' />
+                </button>
+              </div>
+            </div>
+
+            <EntryForm />
+
+          </div >
+        </FormikEmptyModal>
+
       }
     </>
-
   )
 }
 
+
 export default Delete
+
 

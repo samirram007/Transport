@@ -11,7 +11,7 @@ export const FeeHeadSelect = ({ formik, auto,income_group_ids, name,label  }) =>
     if (FeeHeadData.isLoading) return <Loader size={6} label={'Fee Head'} />;
 
     return (
-        <CustomSelect formik={formik} name={name ?? "fee_head_id"}
+        <CustomSelect formik={formik} name={name ?? "feeHeadId"}
             label={label ?? 'Fee Head '}
             options={FeeHeadData.data && FeeHeadData.data.data &&
                 FeeHeadData.data.data.map(({ id: key, name: value }, index) => (

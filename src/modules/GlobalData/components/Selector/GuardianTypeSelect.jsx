@@ -10,7 +10,7 @@ export const GuardianTypeSelect = ({ formik,  name,label,exclude }) => {
     if (GuardianTypeData.isLoading) return <Loader />;
     return (
 
-        <CustomSelect formik={formik} name={name??"guardian_type"}
+        <CustomSelect formik={formik} name={name ?? "guardianType"}
         label={label??'Guardian Type'}
             options={GuardianTypeData.data && GuardianTypeData.data.data &&
                 Object.entries(GuardianTypeData.data.data).map(([ key, value ], index) => (

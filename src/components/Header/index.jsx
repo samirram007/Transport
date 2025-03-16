@@ -3,6 +3,7 @@
 import LogoIcon from '@/assets/logo.png';
 
 import { useUserprofile } from '@/modules/User/hooks/useUserProfile';
+import { GiCash } from 'react-icons/gi';
 import { IoCashOutline } from 'react-icons/io5';
 import { Link, NavLink } from 'react-router';
 import { useSidebar } from '../Sidebar/contexts/features/useSidebar';
@@ -113,6 +114,7 @@ const Header = () => {
             <Settings />
             <DataDisplaySwitcher />
             <FeesMenu />
+            <ExpenseMenu />
             {/* <!-- Chat Notification Area --> */}
           </ul>
 
@@ -133,7 +135,19 @@ const FeesMenu = () => {
     <div className="relative"  >
       <NavLink to={`/${userProfile.data?.data?.role}/fees`}>
 
-        <IoCashOutline className='text-2xl text-green-600 dark:text-green-300' />
+        <IoCashOutline className='text-2xl text-green-600 dark:text-green-300' title='Income/ Fees' />
+
+      </NavLink>
+    </div>
+  )
+}
+const ExpenseMenu = () => {
+  const userProfile = useUserprofile()
+  return (
+    <div className="relative"  >
+      <NavLink to={`/${userProfile.data?.data?.role}/expenses`}>
+
+        <GiCash className='text-2xl text-red-600 dark:text-red-400' title='Expense' />
 
       </NavLink>
     </div>

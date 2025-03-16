@@ -1,3 +1,4 @@
+import { queryClient } from "@/lib/queryClient";
 import { useUserInitialValueDataContext } from "@/modules/UserInitialValue/context/features/useUserInitialValueDataContext";
 import moment from "moment";
 import { createContext, useState } from "react";
@@ -47,7 +48,7 @@ export const FeeContextProvider = ({ children, entryMode = 'create', selectedDat
         ],
         feeItemMonths: [
             {
-                yearId: 2025,
+                year: 2025,
                 monthId: 1,
                 amount: 700,
             }
@@ -66,10 +67,14 @@ export const FeeContextProvider = ({ children, entryMode = 'create', selectedDat
         _setAction(value)
 
     }
-    const handleMutation = async (values) => {
+    const handleMutation = async (values, setSelectedMonths) => {
 
         if (action === 'create') {
-            FeeStoreMutation.mutateAsync(values)
+            FeeStoreMutation.mutateAsync(values).then(() =>
+
+                queryClient.invalidateQueries({ queryKey: ['searchRiderForFees'] })
+            ).then(() => setSelectedMonths([]))
+
         } else if (action === 'edit') {
             FeeUpdateMutation.mutateAsync(values).then(() => {
                 setModalOpen(false)

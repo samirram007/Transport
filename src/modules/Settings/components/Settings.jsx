@@ -14,7 +14,7 @@ const Settings = () => {
       name: 'General',
       items: [
         
-        { title: 'Company', link: 'companies', icon: <LiaHotelSolid />, isActive: true },  
+        { title: 'Organization', link: 'organizations', icon: <LiaHotelSolid />, isActive: true },  
         { title: 'Designation', link: 'designations', icon: <LiaHotelSolid />, isActive: false },
         { title: 'Rider', link: 'riders', icon: <LiaHotelSolid />, isActive: true }, 
 
@@ -30,16 +30,13 @@ const Settings = () => {
     }, 
 
     {
-      name: 'Financial',
+      name: 'Financial Income',
       items: [
         { title: 'Fiscal Year', link: 'fiscal_years', icon: <LiaHotelSolid />, isActive: true },
         { title: 'Income Group', link: 'income_groups', icon: <LiaHotelSolid />, isActive: true },
-        { title: 'Expense Group', link: 'expense_groups', icon: <LiaHotelSolid />, isActive: true },
         { title: 'Fee Head', link: 'fee_heads', icon: <LiaHotelSolid />, isActive: true },
-        { title: 'Expense Head', link: 'expense_heads', icon: <LiaHotelSolid />, isActive: true },
-        { title: 'Fee Template', link: 'fee_templates', icon: <GoListOrdered />, isActive: true },
-
-
+        { title: 'Expense Group', link: 'expense_groups', icon: <LiaHotelSolid />, isActive: true },
+        { title: 'Expense Head', link: 'expense_heads', icon: <LiaHotelSolid />, isActive: true }, 
       ]
     },
    

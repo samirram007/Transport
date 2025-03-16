@@ -1,18 +1,17 @@
 
-  import { lazy } from 'react';
-import { useDocumentTitle } from '../../../hooks'
-
-
-  const DataTable =  lazy(() => import('./DataTable'));
+import { useExpenseHeads } from '../hooks/queries';
+import DataTable from './DataTable';
 
 const DataList = () => {
-    useDocumentTitle()
+    const fetchedData = useExpenseHeads()
+// const mData = fetchedData.data?.data ?? [];
+
+
     return (
         <>
             <div className="flex justify-stretch flex-col w-full overflow-y-auto">
-                <div className="card  animated fadeInDown bg-zinc-600/20">
+                <div className="motion-translate-x-in-[22%] motion-translate-y-in-[0%] motion-opacity-in-[0%] motion-blur-in-[30px] motion-duration-[0.94s]/opacity motion-ease-out-cubic motion-duration-300 ">
                     <DataTable />
-
                 </div>
             </div>
         </>

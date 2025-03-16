@@ -26,6 +26,7 @@ export const FeeHeadContextProvider = ({ children, entryMode = 'create', selecte
     const [action, _setAction] = useState(entryMode)
     const [selectedFeeHead, setSelectedFeeHead] = useState(selectedData ?? {
         name: 'New Type',
+        incomeGroupId: 1
 
 
     });

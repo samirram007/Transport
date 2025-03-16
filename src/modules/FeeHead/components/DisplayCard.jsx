@@ -40,6 +40,7 @@ grid grid-rows-[60px_1fr_80px]
 
         <div className="flex flex-col gap-2  items-start  max-h-[15rem] overflow-y-auto scrollbar-thin scrollbar-thumb-teal-500 scrollbar-track-teal-200">
 
+            <InfoRow label="Group" value={data.incomeGroup?.name} />
 
         </div>
       </CardContent>
@@ -49,6 +50,7 @@ grid grid-rows-[60px_1fr_80px]
           <>
             <Edit />
             <Delete />
+
           </>
         }
 

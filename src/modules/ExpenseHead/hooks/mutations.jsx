@@ -1,41 +1,53 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 
-import { useNavigate } from "react-router";
-import { queryClient } from "../../../utils/queryClient";
-import { storeExpenseHead, updateExpenseHead } from "../services/apis";
 
-import { toast } from "sonner";
-import { useFormModal } from "../../../contexts/FormModalProvider";
+import { deleteExpenseHeadService, storeExpenseHeadService, updateExpenseHeadService } from "../services/apis";
+
+import { queryClient } from "@/lib/queryClient";
+const moduleQueryKey = 'expenseHeads'
 export function useStoreExpenseHeadMutation() {
-  const navigate = useNavigate()
-  const { setOpen } = useFormModal()
+
   return useMutation({
-    mutationFn: storeExpenseHead,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['expense_heads'] })
-      toast.success(data.message);
-      navigate("/expense_heads", { replace: true })
-      setOpen(false)
+    mutationFn: storeExpenseHeadService,
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries({ queryKey: [moduleQueryKey] })
+
+
     },
     onError: (error) => {
-      toast.error(error.response.data.message)
+      console.log("I am   useStoreExpenseHeadMutation Error")
+      // toast.error(error.response.data.message)
     }
   })
 }
 export function useUpdateExpenseHeadMutation() {
-  const navigate = useNavigate()
-  const { setOpen } = useFormModal()
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: updateExpenseHead,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['expense_heads'] })
-      toast.success(data.message);
-      navigate("/expense_heads", { replace: true })
-      setOpen(false)
+    mutationFn: updateExpenseHeadService, // This should call your API to update the school
+    onSuccess: ({ data: updatedExpenseHead }) => {
+      // Update the specific school in the cache
+      queryClient.invalidateQueries({ queryKey: [moduleQueryKey] })
+
+
+      console.log('ExpenseHead updated in cache');
     },
     onError: (error) => {
-      toast.error(error.response.data.message)
+      console.error('Error updating school:', error);
+    },
+  });
+}
+export function useDeleteExpenseHeadMutation() {
+
+  return useMutation({
+    mutationFn: deleteExpenseHeadService,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [moduleQueryKey] })
+
+    },
+    onError: (error) => {
+      console.log("I am   useDeleteExpenseHeadMutation Error")
     }
   })
 }

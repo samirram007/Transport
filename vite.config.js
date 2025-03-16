@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -48,6 +49,17 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist', // Ensure correct output directory
+    minify: true,
+    target: 'esnext',
+    modulePreload: true,
+    cssCodeSplit: true,
+    cssMinify: true,
+    lib: {
+      entry: "src/index.js",
+      name: "MyLibrary",
+      fileName: "my-library",
+      formats: ["es", "cjs"],
+    },
   },
 
   resolve: {

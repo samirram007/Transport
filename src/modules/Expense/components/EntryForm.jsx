@@ -1,235 +1,331 @@
-import { FormikInputBox } from '@/components/form-components/FormikInputBox';
 import { useFormik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { LuLoader } from 'react-icons/lu';
-import { Flip, toast } from 'react-toastify';
+
 import * as Yup from "yup";
 
-import MultiInputBox from '@/components/form-components/MultiInputBox';
-import { AcademicSessionSelect } from '../../Common/components/AcademicSessionSelect';
-import { CampusSelect } from '../../Common/components/CampusSelect';
+import { FormikInputBox } from '@/components/form-components/FormikInputBox';
+
+
+import FormikDeleteForm from '@/components/form-components/FormikDeleteForm';
+import FormikSubmitPanel from '@/components/form-components/FormikSubmitPanel';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { SelectNative } from '@/components/ui/select-native';
+import { toast } from 'sonner';
 import { useExpenseHeads } from '../../ExpenseHead/hooks/queries';
-import { useDeleteExpenseMutation, useStoreExpenseMutation, useUpdateExpenseMutation } from '../hooks/mutations';
+import { useExpenseContext } from '../contexts/features/useExpenseContext';
 const validationSchema = Yup.object().shape({
-    total_amount: Yup.string()
-        .required("Amount is required"),
+    expenseDate: Yup.date().required("Date is required"),
+    voucherNo: Yup.string(),
+    totalAmount: Yup.number()
+        .required("Amount is required")
+        .min(0, "Amount must be greater than 0"),
+    expenseItems: Yup.array()
+        .min(1, "At least one expense item is required")
+        .of(
+            Yup.object().shape({
+                expenseHeadId: Yup.number().required("Expense head is required"),
+                amount: Yup.number().min(0, "Amount must be greater than 0")
+            })
+        )
 })
 
-const EntryForm = ({ initialValues, entryMode }) => {
-
-    const [addMore, setAddMore] = useState(true)
-    const [confirm, setConfirm] = useState(false)
-    const [total, setTotal] = useState(0)
-    const expenseStoreMutation = useStoreExpenseMutation()
-    const expenseUpdateMutation = useUpdateExpenseMutation()
-    const expenseDeleteMutation = useDeleteExpenseMutation()
-    const [changes, setChanges] = useState(0);
-    const handleFormSubmit = (values) => {
-        if (entryMode === 'create') {
-            expenseStoreMutation.mutate(values)
-
-        } else if (entryMode === 'edit') {
-            expenseUpdateMutation.mutate(values)
-        } else if (entryMode === 'delete') {
-            expenseDeleteMutation.mutate(values)
-        }
-    }
-    const formik = useFormik({
-        initialValues,
-        validationSchema,
-        enableReinitialize: true,
-        onSubmit: values => {
-            const total_amount = values.expense_items.reduce((x, i) => x + parseFloat(i.total_amount), 0)
-            if (total_amount == 0) {
-                toast.info(<HTMLContent htmlString={'Please add some item'} />, { transition: Flip })
-                return
-            }
-            values.total_amount = total_amount
-            values.paid_amount = total_amount
-            values.balance_amount = 0
-            handleFormSubmit(values)
-        }
-    })
+const EntryForm = () => {
+    const { selectedExpense: data, action } = useExpenseContext()
 
     return (
-        <div className='w-100 mx-auto'>
-            <form onSubmit={formik.handleSubmit}>
-                <div className='grid grid-cols-1  '>
-                    <div className='grid grid-flow-row md:grid-flow-col grid-cols-6 gap-5'>
-                        <div className='grid gap-4 col-span-6   pb-2 px-4 mb-2 '>
-                            <div className='grid gap-4 grid-cols-12  md:grid-cols-12  mb-2'>
-                                {/* <div className='col-span-1 text-md font-bold'>Filter</div> */}
-                                <div className='col-span-6 md:col-span-2 '>
-                                    <CampusSelect formik={formik} />
-
-
-                                </div>
-
-                                <div className=' md:col-span-6 '></div>
-                                <div className='col-span-6  md:col-span-2 '>
-
-                                    <AcademicSessionSelect formik={formik} />
-
-                                </div>
-                                <div className='col-span-6  md:col-span-2 flex flex-col justify-end items-center '>
-
-                                    <FormikInputBox formik={formik} type={"date"} extClass={'align-self-right'} name="expense_date" label="Date" />
-
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className='flex flex-row justify-center'>
-                        <div className='badge badge-success'>Expenses</div>
-                    </div>
-                    <div className='grid grid-cols-6 gap-5 border-b-2   border-blue-300/30 pb-2 px-4 mb-2'>
-                        <div className='col-span-4'>Particulars</div>
-                        <div className='text-right'>Amount</div>
-                        <div className='text-center'>Action</div>
-                    </div>
-                    <ExpenseItems formik={formik} changes={changes} setChanges={setChanges} setTotal={setTotal} />
-
-                    {
-
-                        !confirm &&
-                        (addMore ?
-                            <ExpenseItemNew formik={formik} changes={changes} setChanges={setChanges} setAddMore={setAddMore} />
-                            :
-
-                            (<div className='flex flex-row gap-4 justify-end p-4'>
-                                <div onClick={() => setAddMore(true)} className='btn btn-primary'>Add More</div>
-                                <div onClick={() => setConfirm(true)} className='btn btn-primary'>Confirm</div>
-                            </div>)
-                        )
-
-
-                    }
-
-
-
-
-                </div>
-                <div className='fixed-bottom'>
-
-                    <div className='border-t-2 border-primary flex flex-row justify-between'>
-                        <div >Total:</div><div>{total}</div>
-                    </div>
-
-                    <div className='flex flex-row '>
-                        <div className='remarks-box flex-1 px-6'>
-                            <MultiInputBox name="remarks" label="Remarks"></MultiInputBox>
-                        </div>
-                        <div className='mx-auto flex flex-col 
-                        justify-end items-center border-t-2 border-blue-300/10 mt-2 
-                        pb-2 pt-6'>
-                            <div className='flex gap-2 items-center text-red-600'>
-
-                                {entryMode === 'delete' && "Are your sure you want to delete this entry?"}
-                            </div>
-                            <button type="submit" className='btn btn-primary btn-wide'>
-                                {entryMode === 'delete' ? 'Delete' : 'Confirm'}
-                                {formik.isSubmitting && (
-                                    <span
-                                        className='spinner-border spinner-border-sm ms-2'
-                                        role='status'
-                                        aria-hidden='true'
-                                    ></span>
-                                )}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+        data &&
+            (action === 'delete') ?
+            <DeleteForm />
+            :
+            (
+                (action === 'create') ?
+                    <FormikForm />
+                    :
+                    <FormikForm />
+            )
     )
+
 }
 
 export default EntryForm
 
-export const ExpenseItems = ({ formik, changes, setChanges }) => {
-    const [expenseItemsData, setExpenseItemsData] = useState(formik.values.expense_items)
-    useEffect(() => {
-        setExpenseItemsData(prev => formik.values.expense_items)
+const FormikForm = () => {
+    const [changes, setChanges] = useState(0);
 
-    }, [changes]);
-    // console.log(formik.values.expense_items);
-    return (
-        <>
+    const { selectedExpense: initialValues,
+        handleMutation, setModalOpen } = useExpenseContext()
 
 
-            {
-                expenseItemsData && expenseItemsData.map((expense_item, index) => (
-                    <ExpenseItemRow key={index} expense_item={expense_item} />
-                ))
+    const formik = useFormik({
+        initialValues,
+        validationSchema,
+        enableReinitialize: true,
+        onSubmit: (values, { setSubmitting }) => {
+            const totalAmount = values.expenseItems.reduce((x, i) => x + parseFloat(i.amount || 0), 0)
+            if (totalAmount === 0) {
+                toast.error("Please add at least one expense item with an amount greater than zero")
+                setSubmitting(false)
+                return
             }
+            values.totalAmount = totalAmount
+            handleMutation(values)
+                .then(() => {
+                    setModalOpen(false)
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        setSubmitting(false);
+                    });
+
+                }, 1000);
+        }
+    })
+    // Ensure expenseItems initialization
+    useEffect(() => {
+        if (!formik.values.expenseItems) {
+            formik.setFieldValue('expenseItems', []);
+        }
+    }, [formik.values, formik.setFieldValue]);
+
+    // Remove console.log for production
+    // Remove console.log for production
+    return (
+        <div className='mx-auto w-full max-w-4xl'>
+            <div className='card bg-base-100 shadow-xl '>
+                <div className='card-body'>
+                    <form onSubmit={formik.handleSubmit}>
+                        <div className='grid grid-cols-1 gap-4'>
+                            <div className='flex flex-row justify-center border-b-2  '>
+                                <div className='badge badge-lg badge-success px-4 py-1 text-md'>Expenses</div>
+                            </div>
+
+                            <div className='flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-base-200 rounded-lg  '>
+                                {/* <h2 className="text-xl font-bold">Expense Entry</h2> */}
+                                <div className='w-full grid  grid-cols-[1fr_200px_1fr]   gap-4'>
+                                    <div>
+
+                                        <FormikInputBox
+                                            formik={formik}
+                                            semi
+                                            type="text"
+                                            name="expenseNo"
+                                            label="Expense No"
+                                            className='disabled'
+                                            disabled
+                                        />
+                                        <FormikInputBox
+                                            formik={formik}
+                                            semi
+                                            type="text"
+                                            name="voucherNo"
+                                            label="Voucher No"
+                                            className=''
+                                        />
+                                    </div>
+                                    <div className='text-center flex items-center justify-center font-bold underline underline-offset-2 decoration-slate-500'></div>
+                                    <div className='flex items-start'>
+
+                                        <FormikInputBox
+                                            formik={formik}
+                                            semi
+                                            type="date"
+                                            name="expenseDate"
+                                            label="Date"
+                                            className='text-right'
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            {/* Expense Items Section */}
+
+                            {/* Table Header */}
+                            <div className='grid grid-cols-6 gap-5 px-6 py-3 mb-3 bg-base-200 font-semibold rounded-t-lg border-b-2 border-primary/30'>
+                                <div className='col-span-4'>Particulars</div>
+                                <div className='text-right'>Amount</div>
+                                <div className='text-center'>Action</div>
+                            </div>
+
+                            {/* Error display */}
+                            {formik.errors.expenseItems && !Array.isArray(formik.errors.expenseItems) && (
+                                <div className="text-error px-6 mb-4 font-semibold">{formik.errors.expenseItems}</div>
+                            )}
+
+                            {/* New expense entry form and existing items */}
+                            <ExpenseItemNew formik={formik} changes={changes} setChanges={setChanges} />
+                            <ExpenseItems formik={formik} changes={changes} setChanges={setChanges} />
+                        </div>
+                        <FormikSubmitPanel formik={formik} />
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
+const DeleteForm = () => {
+
+    const { selectedExpense: initialValues,
+        handleMutation, setModalOpen } = useExpenseContext()
+
+    const formik = useFormik({
+        initialValues,
+        validationSchema,
+        enableReinitialize: true,
+        onSubmit: (values, { setSubmitting }) => {
+            // setIsProcessing(true)
+            handleMutation(values)
+                .then(() => {
+                    setModalOpen(false)
+                })
+                .finally(() => {
+
+                    setTimeout(() => {
+                        // alert(JSON.stringify(values, null, 2));
+                        setSubmitting(false);
+                    });
+
+                }, 1000);
+        }
+    })
 
 
-        </>
+    return (
+        <FormikDeleteForm formik={formik} setModalOpen={setModalOpen} />
+    );
+}
+
+
+export const ExpenseItems = ({ formik, changes, setChanges }) => {
+    const [expenseItemsData, setExpenseItemsData] = useState(formik.values.expenseItems || [])
+
+    useEffect(() => {
+        setExpenseItemsData(formik.values.expenseItems || [])
+    }, [changes, formik.values.expenseItems]);
+
+    if (!expenseItemsData || expenseItemsData.length === 0) {
+        return (
+            <div className="px-6 py-4 text-center text-gray-500 bg-base-100 rounded-lg border border-base-300 my-4">
+                No expense items added yet. Please add items using the form above.
+            </div>
+        );
+    }
+
+    return (
+        <div className="expense-items-container rounded-lg overflow-hidden border border-base-300">
+            {expenseItemsData.map((expenseItem, index) => (
+                <ExpenseItemRow
+                    key={index}
+                    expenseItem={expenseItem}
+                    index={index}
+                    formik={formik}
+                    setChanges={setChanges}
+                />
+            ))}
+
+            <div className="grid grid-cols-6 gap-5 px-6 py-4 mt-2 bg-base-200 font-semibold">
+                <div className="col-span-4 text-right font-bold">Total:</div>
+                <div className="text-right font-bold">
+                    {expenseItemsData.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0).toFixed(2)}
+                </div>
+                <div></div>
+            </div>
+        </div>
     )
 }
 
-const ExpenseItemRow = ({ expense_item }) => {
+
+const ExpenseItemRow = ({ expenseItem, index, formik, setChanges }) => {
+    const handleRemoveItem = () => {
+        const updatedItems = [...formik.values.expenseItems];
+        updatedItems.splice(index, 1);
+        formik.setFieldValue('expenseItems', updatedItems);
+        setChanges(prev => prev + 1);
+        toast.success("Expense item removed");
+    };
 
     return (
         <>
-
-            <div className='grid grid-cols-6 gap-5 border-b-2   border-blue-300/30 pb-2 px-4 mb-2'>
-                <div className='col-span-4'>{expense_item.expense_head.name}</div>
-                <div className='text-right'>{expense_item.total_amount}</div>
-                <div className='text-center'><button type="button">Edit</button></div>
+            <div className='grid grid-cols-6 justify-center gap-5 px-6  border-b border-base-300 hover:bg-base-200/50 transition-colors'>
+                <div className='col-span-4 px-2 flex justify-start items-center'>{expenseItem.expenseHead.name}</div>
+                <div className='text-right px-2 flex justify-end items-center'>{expenseItem.amount}</div>
+                <div className='text-center px-2 flex justify-center items-center'>
+                    <Button
+                        variant={'destructive'}
+                        type="button"
+                        className="btn btn-error btn-sm btn-outline"
+                        onClick={handleRemoveItem}
+                    >
+                        Remove
+                    </Button>
+                </div>
             </div>
-
         </>
     )
 }
-const HTMLContent = ({ htmlString }) => (
-    <div dangerouslySetInnerHTML={{ __html: htmlString }} />
-);
-export const ExpenseItemNew = ({ formik, changes, setChanges, setAddMore }) => {
+
+export const ExpenseItemNew = ({ formik, changes, setChanges }) => {
     const totalAmountRef = useRef()
     const expenseHeadRef = useRef()
-    const ExpenseHeadData = useExpenseHeads({ expense_group_id: [4] });
+    const ExpenseHeadData = useExpenseHeads();
     if (ExpenseHeadData.isLoading) return <LuLoader />;
-    // const initData={...formik.initialValues.expense_items[0], expense_head_id: '', amount: ''}
+    // const initData={...formik.initialValues.expenseItems[0], expenseHeadId: '', amount: ''}
 
 
 
     const addExpense = () => {
-        const existingHead = formik.values.expense_items.find(x => x.expense_head_id == expenseHeadRef.current.value)
+        // Ensure expenseItems exists
+        if (!formik.values.expenseItems) {
+            formik.setFieldValue('expenseItems', []);
+        }
 
-        let errorString = ""
+        const headId = parseFloat(expenseHeadRef.current.value);
+        const amount = parseFloat(totalAmountRef.current.value);
+        const existingHead = formik.values.expenseItems.find(x => x.expenseHeadId === headId);
+
+        // Validation
         if (existingHead) {
-            errorString += "<p>Duplicate Entry</p>"
+            toast.error("This expense head is already added. Please edit the existing entry instead.");
+            return;
         }
-        if (expenseHeadRef.current.value <= 0) {
-            errorString += "<p>Expense head is required</p>"
+
+        if (headId <= 0) {
+            toast.error("Please select an expense head");
+            return;
         }
-        if (totalAmountRef.current.value <= 0) {
-            errorString += "<p>Amount is required</p>"
+
+        if (isNaN(amount) || amount <= 0) {
+            toast.error("Please enter a valid amount greater than zero");
+            return;
         }
-        if (errorString.length > 0) {
-            toast.info(<HTMLContent htmlString={errorString} />, { transition: Flip })
-            return
+
+
+
+        // Create new expense item with proper data
+        const selectedHead = ExpenseHeadData.data.data.find(x => x.id === headId);
+        if (!selectedHead) {
+            toast.error("Selected expense head not found");
+            return;
         }
 
         const initData = {
-            expense_head_id: parseFloat(expenseHeadRef.current.value),
-            expense_head: ExpenseHeadData.data.data.find(x => x.id == expenseHeadRef.current.value),
-            quantity: 1,
-            amount: parseFloat(totalAmountRef.current.value),
-            total_amount: parseFloat(totalAmountRef.current.value)
-        }
+            expenseHeadId: headId,
+            expenseHead: selectedHead,
+            amount: amount,
+        };
 
-        formik.values.expense_items.push(initData)
-        setChanges(prev => prev + 1)
+        // Use proper Formik approach for updating an array field
+        const updatedItems = [...formik.values.expenseItems, initData];
+        formik.setFieldValue('expenseItems', updatedItems);
 
-        setAddMore(false)
-        // console.log( formik.values.expense_items);
+        // Reset input fields
+        expenseHeadRef.current.value = '0';
+        totalAmountRef.current.value = '';
 
+        // Update state to trigger re-render
+        setChanges(prev => prev + 1);
+
+        toast.success("Expense item added successfully");
     }
     const handleDropdownChange = (event) => {
 
@@ -241,31 +337,39 @@ export const ExpenseItemNew = ({ formik, changes, setChanges, setAddMore }) => {
         <>
 
 
-            <div className='grid grid-cols-12 gap-5 border-b-2   border-blue-300/30 pb-2 px-4 mb-2'>
+            <div className='grid grid-cols-6 gap-5 px-6 py-4 mb-3 bg-base-200 rounded-lg border border-primary/30'>
                 <div className='col-span-4'>
-                    {/* <FormikInputBox formik={formik} type={"text"} name={`expense_items.particulars`} label="" /> */}
-                    {/* <input                className={`  input mb-0 input-bordered input-primary    ${formik.errors[name]? 'input-error' : ''}`}/> */}
-                    <select ref={expenseHeadRef}
+                    {/* <ExpenseHeadSelect formik={formik} /> */}
+                    <SelectNative
+                        ref={expenseHeadRef}
                         onChange={handleDropdownChange}
-
-                        className={`select  w-full  select-primary`}
+                        className="select w-full select-primary select-bordered"
                     >
-                        <option value='0'      >-- please select</option>
+                        <option value='0'>-- Please select expense head --</option>
                         {
                             ExpenseHeadData.data.data &&
                             ExpenseHeadData.data.data.map(({ id: key, name: value }, index) => (
                                 <option key={index} value={key}>{value}</option>
                             ))
                         }
-                    </select>
+                    </SelectNative>
                 </div>
-                <div className='col-span-4'></div>
-                <div className='text-right col-span-2'>
-                    <input type={"number"} ref={totalAmountRef} step={"100"} className={`  input mb-0 input-bordered input-primary  `} />
+                <div className='text-right'>
+                    <Input
+                        type="number"
+                        ref={totalAmountRef}
+                        step="0.01"
+                        placeholder="Amount"
+                        className="input w-full input-bordered input-primary"
+                    />
                 </div>
-
-                <div className='text-center col-span-2'>
-                    <button type="button" onClick={addExpense} className='btn btn-primary btn-sm btn-rounded'>Set</button>
+                <div className='text-center'>
+                    <Button
+                        type="button"
+                        onClick={addExpense}
+                        className='btn btn-primary m-0 w-24'>
+                        Add
+                    </Button>
                 </div>
             </div>
 

@@ -1,55 +1,69 @@
 
-import { useState } from 'react';
-import Breadcrumb from '../../../components/Breadcrumb';
+
+
+
+
+
+
+
+import FormikEmptyModal from '@/components/form-components/FormikEmptyModal';
+import { useEffect } from 'react';
+import { MdOutlineAddCircleOutline, MdOutlineCloseFullscreen } from 'react-icons/md';
+import { useExpenseHeadContext } from '../context/features/useExpenseheadContext';
 import EntryForm from './EntryForm';
 
+const Create = () => {
+  const { entryMode, setAction, isModalOpen, setModalOpen } = useExpenseHeadContext();
 
-const Create = ({ modal }) => {
-    const [entryMode, setEntryMode] = useState('create');
+  const handleModalClose = () => {
+    setModalOpen(false)
+  }
+  useEffect(() => {
+    setAction('create')
+  }, [])
+  return (
 
-    const editData = {
-        name: '',
-        expense_group_id:1
-    }
+    <>
 
-    const initialValues = editData ?? {
-        name: '',
-        expense_group_id:1
-    }
+      <button onClick={() => setModalOpen(true)}
+        className="       cursor-pointer absolute md:relative  ">
 
+        <MdOutlineAddCircleOutline className='text-5xl text-teal-600 cursor-pointer
+                        transition-all duration-500 ease-in-out
+                        active:text-teal-300 active:scale-150
+                         hover:text-teal-800' />
+      </button>
+      {isModalOpen &&
+        <FormikEmptyModal isModalOpen={isModalOpen} variant={'full'}  >
+          <div className='w-full h-[90dvh] md:h-[90dvh] max-h-[90dvh]  
+          grid grid-rows-[50px_1fr]  '>
 
-
-    return (
-        <div className='pb-10 w-full'>
-            {
-                !modal &&
-
-                <div className='row  flex flex-col md:flex-row justify-between gap-2 border-b-2 border-blue-300/10 pb-2 mb-2 '>
-                    <div className='flex flex-col gap-2 flex-1 text-3xl'>
-
-                        <Breadcrumb />
-                    </div>
-                    <div className='flex flex-row gap-2 flex-1'>
-
-                    </div>
-                    <div className='flex flex-row gap-2 justify-center flex-1 items-center'>
-
-                    </div>
+            <div className=' py-1 px-2  h-[50px]'>
+              <div className='flex justify-between items-center border-b-2 border-slate-600/50 pb-1' >
+                <div className='text-xl font-bold' >
+                  <div>Add ExpenseHead</div>
                 </div>
-            }
+                <button onClick={handleModalClose} type="button"
+                  className='rounded-full p-2
+                  bg-slate-50/5 text-orange-500 cursor-pointer
+                  hover:text-yellow-500 hover:bg-slate-600
+                  active:text-orange-600 active:touch-pinch-zoom '>
+                  <MdOutlineCloseFullscreen className='text-xl active:scale-90 transition delay-75 ease-in-out ' />
+                </button>
+              </div>
+            </div>
 
             <EntryForm
-            initialValues={initialValues}
-            entryMode={entryMode}
-             />
+              handleModalClose={handleModalClose} />
 
+          </div >
+        </FormikEmptyModal>
 
-        </div>
-    )
+      }
+    </>
+
+  )
 }
 
 
 export default Create
-
-
-

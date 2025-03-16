@@ -19,7 +19,7 @@ export function updateExpenseGroupService(payload) {
     return putData(`/expense_groups/${id}`,data)
 }
 export function deleteExpenseGroupService(payload) {
-    const { id, ...data } = payload;
+    const { id, } = payload;
     return deleteData(`/expense_groups/${id}`)
      
 }

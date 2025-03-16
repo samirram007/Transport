@@ -1,48 +1,26 @@
-import axiosClient from "@/lib/axios-client";
-import { removeEmptyStrings } from "@/lib/removeEmptyStrings";
+import { deleteData, getData, postData, putData } from "@/lib/dataClient";
 
+const moduleApiPath = '/expense_heads'
+export function fetchExpenseHeadsService() {
+    console.log('hello');
 
-export function fetchExpenseHeadById(id) {
-
-    return axiosClient.get(`/expense_heads/${id}`)
-        .then(({ data }) => {
-            return data;
-        })
+    return getData(`${moduleApiPath}`)
 }
-export function fetchExpenseHeads() {
-
-    return axiosClient.get("/expense_heads")
-        .then(response => {
-
-            return response.data;
-        })
-        .catch(err => {
-            throw err;
-        });
+export function fetchExpenseHeadByIdService(id) {
+    return getData(`${moduleApiPath}/${id}`)
 }
 
-
-export function storeExpenseHead(payload) {
-
-    return axiosClient.post("/expense_heads", removeEmptyStrings(payload))
-        .then(response => {
-
-            return response.data;
-        })
-        .catch(err => {
-
-            throw err;
-        });
-
+export async function storeExpenseHeadService(payload) {
+    return await postData(`${moduleApiPath}`, payload)
 }
-export function updateExpenseHead(payload) {
+
+export function updateExpenseHeadService(payload) {
     const { id, ...data } = payload;
-    return axiosClient.put(`/expense_heads/${id}`, removeEmptyStrings(payload))
-        .then(response => {
-            return response.data;
-        })
-        .catch(err => {
-            throw err;
-        });
-}
 
+    return putData(`${moduleApiPath}/${id}`, data)
+}
+export function deleteExpenseHeadService(payload) {
+    const { id, ...data } = payload;
+    return deleteData(`${moduleApiPath}/${id}`)
+
+}

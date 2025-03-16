@@ -3,10 +3,14 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import { AcademicClasses } from "@/pages/AcademicClass";
 import { Dashboard } from "@/pages/Dashboard";
 import { Designations } from "@/pages/Designation";
+import { CreateExpense, Expenses } from "@/pages/Expense";
+import { ExpenseGroups } from "@/pages/ExpenseGroup";
+import { ExpenseHeads } from "@/pages/ExpenseHead";
 import { CreateFee, Fees } from "@/pages/Fee";
 import { FeeHeads } from "@/pages/FeeHead";
 import { FiscalYears } from "@/pages/FiscalYear";
 import { IncomeGroups } from "@/pages/IncomeGroup";
+import { Organizations } from "@/pages/Organization";
 import { Riders } from "@/pages/Rider";
 import { Schools } from "@/pages/School";
 import { Settings } from "@/pages/Settings";
@@ -40,9 +44,14 @@ const AdminRouter = () => {
           <Route index element={<Fees />} />
           <Route path="collection" element={<CreateFee />} />
         </Route>
+        <Route path="expenses">
+          <Route index element={<Expenses />} />
+          <Route path="process" element={<CreateExpense />} />
+        </Route>
 
         <Route path="settings">
           <Route index element={<Settings />} />
+          <Route path="Organizations" element={<Organizations />} />
           <Route path="schools" element={<Schools />} />
           <Route path="riders" element={<Riders />} />
           <Route path="vehicles" element={<Vehicles />} />
@@ -55,10 +64,12 @@ const AdminRouter = () => {
           <Route path="fiscal_years" element={<FiscalYears />} />
           <Route path="income_groups" element={<IncomeGroups />} />
           <Route path="fee_heads" element={<FeeHeads />} />
+
+          <Route path='expense_groups' element={<ExpenseGroups />} />
+          <Route path='expense_heads' element={<ExpenseHeads />} />
+
           {/* <Route path='expense_groups' element={<ExpenseGroups />} />
-                    <Route path='expense_groups' element={<ExpenseGroups />} />
                     <Route path='fee_heads' element={<FeeHeads />} />
-                    <Route path='expense_heads' element={<ExpenseHeads />} />
                     <Route path='fee_templates' element={<FeeTemplates />} />
 
                     <Route path='documents' element={<Documents />} /> */}

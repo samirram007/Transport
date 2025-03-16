@@ -1,58 +1,39 @@
-import axiosClient from '../../../utils/axios-client';
-import { removeEmptyStrings } from '../../../utils/removeEmptyStrings';
-export function fetchExpense(id) {
 
-    return axiosClient.get(`/expenses/${id}`)
-        .then(({ data }) => {
-            return data;
-        })
+import { deleteData, getData, postData, putData } from '@/lib/dataClient';
+
+const moduleApiPath = '/expenses'
+export function fetchExpenseService(id) {
+
+    return getData(`${moduleApiPath}/${id}`)
 }
-export function fetchExpenses(payload) {
-const filterString=`academic_session_id=${payload.academic_session_id}&campus_id=${payload.campus_id}&from=${payload.from}&to=${payload.to}`
+export function fetchExpensesService(payload) {
+    const filterString = `fiscalYearId=${payload.fiscalYearId}&from=${payload.from}&to=${payload.to}`
 
-    return axiosClient
-        .get(`/expenses?${filterString}`)
-        .then(response => {
-            return response.data;
-        })
-        .catch(err => {
-            throw err;
-        });
+    return getData(`${moduleApiPath}?${filterString}`)
+
+}
+export function fetchSearchRiderForExpensesService(payload) {
+    const filterString = `text=${payload.text}`
+
+    return getData(`/search_riders_for_expenses?${filterString}`)
 
 }
 
 
-
-export function storeExpense(payload) {
-
-    return axiosClient.post("/expenses", removeEmptyStrings(payload))
-        .then(response => {
-            return response.data;
-        })
-        .catch(err => {
-
-            throw err;
-        });
+export function storeExpenseService(payload) {
+    return postData(`${moduleApiPath}`, payload)
 
 }
-export function updateExpense(payload) {
+export function updateExpenseService(payload) {
     const { id, ...data } = payload;
+    return putData(`${moduleApiPath}/${id}`, data)
 
-    return axiosClient.put(`/expenses/${id}`, removeEmptyStrings(data))
-        .then(response => {
-            return response.data;
-        })
-        .catch(err => {
-            throw err;
-        });
 }
-export function deleteExpense(payload) {
-    const { id, ...data } = payload;
-    return axiosClient.delete(`/expenses/${id}`)
-        .then(response => {
-            return response.data;
-        })
-        .catch(err => {
-            throw err;
-        });
+export function deleteExpenseService(payload) {
+
+
+    const { id } = payload;
+
+    return deleteData(`${moduleApiPath}/${id}`)
+
 }

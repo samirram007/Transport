@@ -37,9 +37,9 @@ const SwitchButton = () => {
     return (
         <div onClick={handleOnClick} className="rounded-full p-2 cursor-pointer transition-colors text-slate-500 dark:text-white hover:text-slate-600 active:text-slate-700">
             {currentMode === "grid" ? (
-                <TfiViewList className="text-2xl text-blue-500" />
+                <TfiViewList className="text-2xl text-blue-500 active:text-blue-700" title='Switch to Grid View' />
             ) : (
-                <BsGrid3X3Gap className="text-2xl text-blue-500" />
+                    <BsGrid3X3Gap className="text-2xl text-blue-500 active:text-blue-700" title='Switch to Table View' />
             )}
         </div>
     );

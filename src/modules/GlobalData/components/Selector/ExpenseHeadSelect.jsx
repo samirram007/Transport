@@ -10,7 +10,7 @@ export const ExpenseHeadSelect = ({ formik, expense_group_ids,  name,label,exclu
     if (ExpenseHeadData.isLoading) return <Loader />;
     return (
 
-        <CustomSelect formik={formik} name={name??"expense_head_id"} label={label??'ExpenseHead'}
+        <CustomSelect formik={formik} name={name ?? "expenseHeadId"} label={label ?? 'Expense Head'}
             options={ExpenseHeadData.data && ExpenseHeadData.data.data &&
                 ExpenseHeadData.data.data.map(({ id: key, name: value }, index) => (
 
