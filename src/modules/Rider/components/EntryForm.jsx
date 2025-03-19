@@ -1,5 +1,4 @@
 import { useFormik } from 'formik';
-import { lazy } from 'react';
 import * as Yup from "yup";
 
 
@@ -12,25 +11,18 @@ import { ImageBox } from '@/components/form-components/ImageBox';
 
 import FormikDeleteForm from '@/components/form-components/FormikDeleteForm';
 import FormikSubmitPanel from '@/components/form-components/FormikSubmitPanel';
-import { CampusAcademicClassSelect } from '@/modules/GlobalData/components/Selector/CampusAcademicClassSelect';
-import { CasteSelect } from '@/modules/GlobalData/components/Selector/CasteSelect';
-import { FiscalYearSelect } from '@/modules/GlobalData/components/Selector/FiscalYearSelect';
-import { GenderSelect } from '@/modules/GlobalData/components/Selector/GenderSelect';
-import { LanguageSelect } from '@/modules/GlobalData/components/Selector/LanguageSelect';
-import { NationalitySelect } from '@/modules/GlobalData/components/Selector/NationalitySelect';
-import { ReligionSelect } from '@/modules/GlobalData/components/Selector/ReligionSelect';
-import GuardianEntryPanel from '@/modules/Guardian/components/GuardianEntryPanel';
-import { useRiderContext } from '../contexts/features/useRiderContext';
-import AddressEntryPanel from '@/modules/Address/components/AddressEntryPanel';
-import { SchoolSelect } from '@/modules/GlobalData/components/Selector/SchoolSelect';
-import { VehicleSelect } from '@/modules/GlobalData/components/Selector/VehicleSelect';
-import { SectionSelect } from '@/modules/GlobalData/components/Selector/SectionSelect';
-import { StandardSelect } from '@/modules/GlobalData/components/Selector/StandardSelect';
-import { SlotSelect } from '@/modules/GlobalData/components/Selector/SlotSelect';
- 
 
-const Guardians = lazy(() => import('./Guardians'))
-const Addresses = lazy(() => import('./Addresses'))
+import { useRiderContext } from '../contexts/features/useRiderContext';
+
+import { SchoolSelect } from '@/modules/GlobalData/components/Selector/SchoolSelect';
+import { SectionSelect } from '@/modules/GlobalData/components/Selector/SectionSelect';
+import { SlotSelect } from '@/modules/GlobalData/components/Selector/SlotSelect';
+import { StandardSelect } from '@/modules/GlobalData/components/Selector/StandardSelect';
+import { VehicleSelect } from '@/modules/GlobalData/components/Selector/VehicleSelect';
+import { useSchoolContext } from '@/modules/School/context/features/useSchoolContext';
+
+
+
 const validationSchema = Yup.object().shape({
     name: Yup.string()
         .required("Name is required"),
@@ -91,32 +83,13 @@ const FormikForm = () => {
                         <ImageBox formik={formik} name="profileDocumentId" editable={true} resource="logoImage" />
 
                         <FormikInputBox formik={formik} name="name" label="Name" />
-
+                        <FormikInputBox formik={formik} name="code" label="Code" />
                         <FormikInputBox formik={formik} name="contactNo" type={'text'} label="Contact Number" />
                         <SchoolSelect formik={formik} />
                         <StandardSelect formik={formik} />
                         <SectionSelect formik={formik} />
                         
                         <FormikInputBox formik={formik} name="rollNo" type={'text'} label="Roll Number" />
-                        {/* <GenderSelect formik={formik} />
-
-                        <NationalitySelect formik={formik} />
-                        <LanguageSelect formik={formik} />
-                        <ReligionSelect formik={formik} />
-                        <CasteSelect formik={formik} /> */}
-
-                        {/* <FormikInputBox formik={formik} name="aadhaarNo" type={'text'} label="Aadhaar Number" />
-
-                        <FormikInputBox formik={formik} name="dob" type={'date'} label="Date of Birth" />
-
-
-                        <FormikInputBox formik={formik} name="birthMark" type={'text'} label="Birth Mark" />
-
-
-
-
-                        <FormikInputBox formik={formik} name="email" type={'email'} label="Email" /> */}
-
 
                         <VehicleSelect formik={formik} />
                         <SlotSelect formik={formik} />

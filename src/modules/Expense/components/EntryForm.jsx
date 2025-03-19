@@ -15,9 +15,44 @@ import { SelectNative } from '@/components/ui/select-native';
 import { toast } from 'sonner';
 import { useExpenseHeads } from '../../ExpenseHead/hooks/queries';
 import { useExpenseContext } from '../contexts/features/useExpenseContext';
+
+/**
+ * Expense Entry Form Component
+ * ----------------------------
+ * This component provides a comprehensive interface for expense management with the following features:
+ * 
+ * 1. FUNCTIONALITY:
+ *    - Handles creation of new expenses with multiple line items
+ *    - Supports editing of existing expenses
+ *    - Provides deletion capabilities for expense records
+ *    
+ * 2. FORM MANAGEMENT:
+ *    - Uses Formik library for form state management, validation, and submission
+ *    - Implements efficient form handling with automatic field tracking
+ *    
+ * 3. VALIDATION:
+ *    - Implements Yup schema validation for all form fields
+ *    - Validates required fields, number formats, and relational integrity
+ *    - Provides clear error messages for validation failures
+ *    
+ * 4. EXPENSE ITEMS:
+ *    - Supports adding multiple expense line items
+ *    - Validates each expense item individually
+ *    - Prevents duplicate expense heads
+ *    
+ * 5. CALCULATIONS:
+ *    - Automatically calculates total amount from individual expense items
+ *    - Enforces positive amounts and validates total expense value
+ *    
+ * COMPONENT STRUCTURE:
+ * - EntryForm (main): Root component that determines which form to display
+ * - FormikForm: Handles creation and editing of expenses with full form functionality
+ * - DeleteForm: Specialized form for expense deletion confirmation
+ */
 const validationSchema = Yup.object().shape({
     expenseDate: Yup.date().required("Date is required"),
     voucherNo: Yup.string(),
+    note: Yup.string(),
     totalAmount: Yup.number()
         .required("Amount is required")
         .min(0, "Amount must be greater than 0"),
@@ -32,24 +67,29 @@ const validationSchema = Yup.object().shape({
 })
 
 const EntryForm = () => {
-    const { selectedExpense: data, action } = useExpenseContext()
+    const { selectedExpense: data, action } = useExpenseContext();
+    console.log('action Check:', action);
 
-    return (
-        data &&
-            (action === 'delete') ?
-            <DeleteForm />
-            :
-            (
-                (action === 'create') ?
-                    <FormikForm />
-                    :
-                    <FormikForm />
-            )
-    )
+    if (!action) return null; // Handle undefined action cases
 
-}
+    if (action === 'delete' && data) {
+        return <DeleteForm />;
+    }
+
+    if (action === 'create') {
+        return <FormikForm />;
+    }
+
+    if (action === 'edit' && data) {
+        return <FormikForm />;
+    }
+
+    return null; // Default case to avoid returning undefined
+};
 
 export default EntryForm
+
+
 
 const FormikForm = () => {
     const [changes, setChanges] = useState(0);
@@ -155,6 +195,17 @@ const FormikForm = () => {
                             {/* New expense entry form and existing items */}
                             <ExpenseItemNew formik={formik} changes={changes} setChanges={setChanges} />
                             <ExpenseItems formik={formik} changes={changes} setChanges={setChanges} />
+
+                            <div className='mt-6 mb-2 bg-base-200 rounded-lg p-4 border border-primary/30'>
+                                <FormikInputBox
+                                    formik={formik}
+                                    type="text"
+                                    name="note"
+                                    label="Note / Narration"
+                                    placeholder="Enter a narration for this expense"
+                                    className='w-full'
+                                />
+                            </div>
                         </div>
                         <FormikSubmitPanel formik={formik} />
                     </form>

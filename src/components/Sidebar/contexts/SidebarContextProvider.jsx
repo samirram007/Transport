@@ -59,7 +59,7 @@ export const SidebarContext=createContext()
         <SidebarContext  value={{
             trigger,sidebar,
             sidebarOpen,setSidebarOpen,
-            sidebarExpanded,
+        sidebarExpanded, setSidebarExpanded, 
             pathname, 
         }}>
             {children}

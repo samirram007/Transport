@@ -49,17 +49,17 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist', // Ensure correct output directory
-    minify: true,
-    target: 'esnext',
-    modulePreload: true,
-    cssCodeSplit: true,
-    cssMinify: true,
-    lib: {
-      entry: "src/index.js",
-      name: "MyLibrary",
-      fileName: "my-library",
-      formats: ["es", "cjs"],
-    },
+    // minify: true,
+    // target: 'esnext',
+    // modulePreload: true,
+    // cssCodeSplit: true,
+    // cssMinify: true,
+    // lib: {
+    //   entry: "index.html",
+    //   name: "GoSchool",
+    //   fileName: "go-school",
+    //   formats: ["es", "cjs"],
+    // },
   },
 
   resolve: {

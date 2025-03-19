@@ -46,7 +46,7 @@ const SearchRider = () => {
                             ref={searchTextRef}
                             name="search"
                             onChange={handleSearching}
-                            defaultValue={'s '}
+                            defaultValue={''}
                             autoFocus
                             placeholder="Enter Rider Name"
                             autoComplete="off"
@@ -89,27 +89,34 @@ const RiderFeesCard = ({ rider }) => {
     const [selectedMonths, setSelectedMonths] = useState([])
     return (
         <div key={rider.id} className="border-0 border-teal-600 dark:border-secondary  
+        bg-slate-100 dark:bg-gray-900
                 border-t-[1px] border-r-0 shadow dark:shadow-md shadow-teal-600 dark:shadow-secondary  rounded-lg p-4  ">
-            <div className="flex items-start justify-between gap-3 border-b-2 border-slate-300 pb-2">
-                <div>
+            <div className="flex items-start justify-between gap-3   pb-2">
+                <div className="flex-1">
                     <p className="text-lg font-semibold">{rider.name}</p>
                     <p className="text-slate-500 text-sm">{rider.school?.name} ({capitalizeFirstLetter(rider.schoolTime)})</p>
-                    <div className="flex flex-col mt-2 text-slate-400 text-sm gap-1">
-                        <div className="grid grid-cols-[50px_10px_1fr]">
+                    <div className="w-full flex flex-row justify-between mt-2 text-slate-800 dark:text-slate-400 text-sm gap-2">
+                        <div className="grid grid-cols-[40px_5px_1fr]">
+                            <strong>Code</strong>
+                            <span>:</span>
+                            <div>{capitalizeFirstLetter(rider.code ?? 'n/a')}</div>
+                        </div>
+                        <div className="grid grid-cols-[40px_5px_1fr]">
                             <strong>Class</strong>
                             <span>:</span>
                             <div>{capitalizeFirstLetter(rider.standard)}</div>
                         </div>
-                        <div className="grid grid-cols-[50px_10px_1fr]">
+                        <div className="grid grid-cols-[40px_5px_1fr]">
                             <strong>Roll</strong>
                             <span>:</span>
                             <div>{rider.rollNo}</div>
                         </div>
-                        <div className="grid grid-cols-[50px_10px_1fr]">
+
+                    </div>
+                    <div className="grid grid-cols-[40px_5px_1fr] pb-2">
                             <strong>Fee</strong>
                             <span>:</span>
-                            <div>₹{rider.monthlyCharge}</div>
-                        </div>
+                        <div>₹{rider.monthlyCharge}</div>
                     </div>
                 </div>
                 <Avatar className="shadow-lg w-14 h-14">
@@ -169,8 +176,9 @@ const MonthPanel = ({ fees, rider, setSelectedMonths }) => {
     // console.log('months', months);
 
     return (
-        <div className="flex flex-col flex-nowrap gap-1 mt-2 justify-between w-96">
-            <div className="grid grid-cols-[20px_100px_80px__80px_1fr] items-center gap-2 border-b-4 border-b-slate-400">
+        <div className="flex flex-col flex-nowrap gap-1   justify-between w-96">
+            <div className="grid grid-cols-[20px_100px_80px__80px_1fr] items-center gap-2 border-y-2
+             border-y-slate-400 font-bold">
                 <div><Input type={'checkbox'} disabled /></div>
                 <div>Month</div>
                 <div>Amount</div>
@@ -179,7 +187,7 @@ const MonthPanel = ({ fees, rider, setSelectedMonths }) => {
             </div>
             {months.map((month, index) => (
 
-                <div key={index} className="grid grid-cols-[20px_100px_80px__80px_1fr] items-center gap-2 border-2 border-b-slate-400/50">
+                <div key={index} className="h-10 grid grid-cols-[20px_100px_80px__80px_1fr] items-center gap-2 border-b-2 border-b-slate-400/50">
                     {
                         month.paid ?
                             <>
@@ -238,7 +246,7 @@ const PrintFees = ({ feeId }) => {
                                 </div>
 
                                 <div className='mb-3 mr-10  bottom-0 gap-4     right-0 flex items-center justify-end'>
-                                    <button className='badge badge-error btn-outline bg-error text-slate-50    '
+                                        <button className='badge badge-error btn-outline bg-error text-slate-900 dark:text-slate-50    '
                                         onClick={() => reactToPrintFn()}>
                                         <Printer /> </button>
                                     <button onClick={handleModalClose} type="button"

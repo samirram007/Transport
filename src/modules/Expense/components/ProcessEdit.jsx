@@ -3,11 +3,11 @@ import ExpenseContextProvider from '../contexts/ExpenseContextProvider';
 import ExpenseDataContextProvider from '../contexts/ExpenseDataContextProvider';
 
 const EntryForm = lazy(() => import('./EntryForm'))
-const Process = () => {
+const ProcessEdit = ({ selectedData }) => {
     return (
         <>
             <ExpenseDataContextProvider>
-                <ExpenseContextProvider action={'create'}>
+                <ExpenseContextProvider action={'edit'} selectedData={selectedData}>
                     <EntryForm />
                 </ExpenseContextProvider>
             </ExpenseDataContextProvider>
@@ -15,4 +15,5 @@ const Process = () => {
     )
 }
 
-export default Process
+export default ProcessEdit
+

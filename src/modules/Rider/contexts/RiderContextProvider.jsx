@@ -28,12 +28,13 @@ export const RiderContextProvider = ({ children, entryMode = 'create', selectedD
     }
     const RiderStoreMutation = useStoreRiderMutation()
     const RiderUpdateMutation = useUpdateRiderMutation()
-    // const RiderDeleteMutation = useDeleteRiderMutation()
+    //  const RiderDeleteMutation = useDeleteRiderMutation()
     const [isModalOpen, setModalOpen] = useState(false)
     const [isProcessing, setIsProcessing] = useState(false)
     const [action, _setAction] = useState(entryMode)
     const [selectedRider, setSelectedRider] = useState(selectedData ?? {
         name: 'New Rider',
+        code: '',
         riderType: 'student',
         email: '',
         contactNo: '',
@@ -65,11 +66,11 @@ export const RiderContextProvider = ({ children, entryMode = 'create', selectedD
                 // setSelectedRider(values)
             })
         } else if (action === 'delete') {
-            RiderDeleteMutation.mutateAsync(values)
-                .then(() => {
-                    setModalOpen(false)
-                    // setSelectedRider(values)
-                })
+            // RiderDeleteMutation.mutateAsync(values)
+            //     .then(() => {
+            //         setModalOpen(false)
+            //         // setSelectedRider(values)
+            //     })
         }
         else {
             console.info('Invalid entry mode')

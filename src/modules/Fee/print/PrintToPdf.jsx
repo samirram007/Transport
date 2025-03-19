@@ -85,6 +85,7 @@ export const PrintForm = ({ feeId }) => {
               <div className='text-left'>Name: {feeData.riderSnapshot?.name}</div>
               <div className='text-left'>School: {feeData.riderSnapshot.school.name ?? 'NAVA JYOTI VIDYAPITH'}</div>
               <div className='flex flex-row gap-6'>
+                <div>Code: {capitalizeAllWords(feeData.riderSnapshot?.code ?? (feeData.rider?.code ?? 'n/a'))} </div>
                 <div>Class: {capitalizeAllWords(feeData.riderSnapshot?.standard)} </div>
                 {/* {JSON.stringify(feeData.riderSnapshot)} */}
                 <div>Sec: {capitalizeAllWords(feeData.riderSnapshot?.section) ?? 'N/A'}</div>
@@ -110,7 +111,7 @@ export const PrintForm = ({ feeId }) => {
         </div>
         <div className='px-2'>
           <div className=' w-full           text-slate-800 bottom-0 grid grid-cols-12 justify-end gap-2           font-bold border-t-4 border-slate-800  '>
-            <div className='col-span-10 text-right border-r-2 border-slate-800  '>{'Total'}:</div>
+            <div className='col-span-10 text-right border-r-2 border-slate-800 px-2 '>{'Total'}:</div>
             <div className='col-span-2 text-right '>
               <div className='py-1 pr-4 font-semibold'>
                 {Number(feeData.totalAmount).toFixed(2)}
@@ -171,7 +172,7 @@ export const FeeEntryRowPrint = ({ index, feeItem }) => {
   return (
     <>
 
-      <div className={` grid grid-cols-12  items-center  text-xs    `}>
+      <div className={` grid grid-cols-12   gap-2 items-center  text-xs    `}>
 
         <div className='col-span-10 flex flex-row items-center gap-2 pl-4 border-r-2 border-slate-800'>
           <div className='py-2'>

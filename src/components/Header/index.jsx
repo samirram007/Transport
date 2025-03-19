@@ -3,6 +3,7 @@
 import LogoIcon from '@/assets/logo.png';
 
 import { useUserprofile } from '@/modules/User/hooks/useUserProfile';
+import { User } from 'lucide-react';
 import { GiCash } from 'react-icons/gi';
 import { IoCashOutline } from 'react-icons/io5';
 import { Link, NavLink } from 'react-router';
@@ -58,12 +59,12 @@ const Header = () => {
           </button>
           {/* <!-- Hamburger Toggle BTN --> */}
 
-          <Link className="flex-shrink-0 block lg:hidden" to="/">
+          <Link className="flex-shrink-0 hidden" to="/">
             <img src={LogoIcon} alt="Logo" />
           </Link>
         </div>
 
-        <div className="hidden sm:block">
+        <div className="hidden  ">
           <form action="https://formbold.com/s/unique_form_id" method="POST">
             <div className="relative">
               <button className="absolute left-0 -translate-y-1/2 top-1/2">
@@ -112,7 +113,11 @@ const Header = () => {
             {/* <!-- Chat Notification Area --> */}
             {/* <DropdownMessage /> */}
             <Settings />
+            <span className='hidden md:block'>
+
             <DataDisplaySwitcher />
+            </span>
+            <RiderMenu />
             <FeesMenu />
             <ExpenseMenu />
             {/* <!-- Chat Notification Area --> */}
@@ -129,6 +134,18 @@ const Header = () => {
 
 export default Header;
 
+const RiderMenu = () => {
+  const userProfile = useUserprofile()
+  return (
+    <div className="relative"  >
+      <NavLink to={`/${userProfile.data?.data?.role}/riders`}>
+
+        <User className='text-2xl text-blue-600 dark:text-blue-500' title='Riders/ Students' />
+
+      </NavLink>
+    </div>
+  )
+}
 const FeesMenu = () => {
   const userProfile = useUserprofile()
   return (

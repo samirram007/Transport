@@ -5,7 +5,7 @@ import { Button } from "../ui/button"
 const FormikSubmitPanel = ({formik}) => {
     return (
         <div className="flex justify-center items-center sticky bottom-0 
-        border-t-6 border-blue-300/50 dark:border-blue-300/20 py-4 px-4 mt-2">
+        border-t-6 border-blue-300/50 dark:border-blue-300/20 py-4 px-4 mt-2 bg-white dark:bg-slate-900">
                 <div className="flex gap-2 items-center text-red-600">
                     
                 </div>

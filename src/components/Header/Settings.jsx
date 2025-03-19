@@ -23,7 +23,7 @@ const Settings = () => {
         }
     },[location.pathname])
   return (
-    <div onClick={handleOnClick} className='  rounded-full dark:bg-meta-4 dark:text-white'>
+      <div onClick={handleOnClick} className='hidden md:block  rounded-full dark:bg-meta-4 dark:text-white'>
         <CiSettings className={`text-3xl cursor-pointer ${open?'text-blue-500':'text-slate-500 dark:text-white hover:text-slate-600 active:text-slate-700'} `}  /></div>
   )
 }

@@ -3,7 +3,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import { AcademicClasses } from "@/pages/AcademicClass";
 import { Dashboard } from "@/pages/Dashboard";
 import { Designations } from "@/pages/Designation";
-import { CreateExpense, Expenses } from "@/pages/Expense";
+import { CreateExpense, EditExpense, Expenses } from "@/pages/Expense";
 import { ExpenseGroups } from "@/pages/ExpenseGroup";
 import { ExpenseHeads } from "@/pages/ExpenseHead";
 import { CreateFee, Fees } from "@/pages/Fee";
@@ -47,6 +47,7 @@ const AdminRouter = () => {
         <Route path="expenses">
           <Route index element={<Expenses />} />
           <Route path="process" element={<CreateExpense />} />
+          <Route path="process/:id" element={<EditExpense />} />
         </Route>
 
         <Route path="settings">

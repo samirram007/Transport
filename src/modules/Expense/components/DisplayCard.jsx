@@ -1,7 +1,9 @@
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 
+import { useProfile } from '@/modules/Auth/hooks/useProfile';
 import moment from 'moment';
-import { MdOutlineDateRange } from 'react-icons/md';
+import { MdEdit, MdOutlineDateRange } from 'react-icons/md';
+import { Link } from 'react-router';
 import { useExpenseContext } from '../contexts/features/useExpenseContext';
 import { useExpenseDataContext } from '../contexts/features/useExpenseDataContext';
 import Edit from './Edit';
@@ -91,7 +93,7 @@ const BaseCard = () => {
         {data &&
           <>
             {/* <Info/> */}
-            <Edit />
+            <EditButton expenseId={data.id} />
             <Print expenseId={data.id} />
             {/* <Delete /> */}
           </>
@@ -113,4 +115,18 @@ const InfoRow = ({ label, value }) => {
       <div className="pr-2 truncate whitespace-normal line-clamp-2 ">{value}</div>
     </div>
   );
+}
+
+
+const EditButton = ({ expenseId }) => {
+  const userProfile = useProfile()
+  return (
+    <Link
+      to={`/${userProfile.data?.data?.role}/expenses/process/${expenseId}`}
+      title='Edit'
+      className="box-border flex flex-col items-center justify-center bg-transparent border-2 border-teal-600 rounded-md cursor-pointer w-15 h-15">
+      <MdEdit className='text-2xl text-teal-400 transition-all duration-500 ease-in-out cursor-pointer active:text-blue-300 active:scale-150 hover:text-teal-800' />
+      <div>Edit</div>
+    </Link>
+  )
 }

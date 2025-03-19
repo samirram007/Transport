@@ -7,7 +7,7 @@ import { useSidebar } from './contexts/features/useSidebar';
 
 
 const Sidebar = ( ) => {
-  const {sidebar,trigger,sidebarOpen,pathname}=useSidebar()
+  const { sidebar, trigger, sidebarOpen, pathname, setSidebarOpen } = useSidebar()
   return (
     <aside
       ref={sidebar}
