@@ -2,84 +2,77 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 
-import { createContext, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 // import { useRefreshToken } from "../hooks/useRefreshToken";
 
 
 export const AuthContext = createContext({
     user: null,
     token: null,
-    refresh: null,
+    refreshToken: null,
     role: null,
     setRole: () => { },
     setUser: () => { },
     setToken: () => { },
     setRefreshToken: () => { },
     loading: false,
-    isLoading: () => { },
+    setLoading: () => { },
     isGuest: true,
-    setIsGuest: () => { },
     AuthCheck: () => { },
 
 });
 
 const AuthContextProvider = ({ children }) => {
-    // const mutateRefreshToken = useRefreshToken()
-    const [user, _setUser] = useState({});
-    const [role, setRole] = useState('');
-    const [isGuest, setIsGuest] = useState(true);
+    const [user, setUser] = useState(null);
+    const [role, setRole] = useState("");
+    const [token, setTokenState] = useState(localStorage.getItem("ACCESS_TOKEN") || null);
+    const [refreshToken, setRefreshToken] = useState(localStorage.getItem("REFRESH_TOKEN") || null);
+    const [loading, setLoading] = useState(true);
+
+    // Derived state: No need to manually update `isGuest`
+    const isGuest = !token;
 
 
-    // const [token, _setToken] = useState(null);
-    // const [refreshToken, setRefreshToken] = useState(null);
-    const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN") ?? null);
-    const [refreshToken, setRefreshToken] = useState(localStorage.getItem("REFRESH_TOKEN") ?? null);
-
-
-    const [loading, setLoading] = useState(true)
-
-
-    const setUser = (_user) => {
-        _setUser(_user);
-        if (_user) {
-            setIsGuest(false)
-        }
-    }
-    const setToken = (_token, refreshToken) => {
-
-        _setToken(_token);
-        setRefreshToken(refreshToken)
+    const setToken = (_token, _refreshToken) => {
         if (_token) {
             localStorage.setItem("ACCESS_TOKEN", _token);
-            localStorage.setItem("REFRESH_TOKEN", refreshToken);
-            setIsGuest(false)
+            localStorage.setItem("REFRESH_TOKEN", _refreshToken);
         } else {
-
             localStorage.removeItem("ACCESS_TOKEN");
             localStorage.removeItem("REFRESH_TOKEN");
-            setIsGuest(true)
         }
-
+        setTokenState(_token);
+        setRefreshToken(_refreshToken);
     };
 
-    const AuthCheck = () => {
-
+    const AuthCheck = useCallback(() => {
+        setLoading(true);
         if (token) {
-            setIsGuest(false)
+            setUser({ name: "John Doe" }); // Replace with actual user data fetching logic
         } else {
-            setIsGuest(true)
+            setUser(null);
         }
-    }
+        setLoading(false);
+    }, [token]);
 
-
+    useEffect(() => {
+        AuthCheck();
+    }, [AuthCheck]);
     return (
         <AuthContext
             value={{
-                user, token, setToken, role,
-                refreshToken, setUser, setRole,
+                user,
+                token,
+                refreshToken,
+                role,
+                setRole,
+                setUser,
+                setToken,
                 setRefreshToken,
-                isGuest, setIsGuest, AuthCheck,
-                loading, setLoading
+                isGuest,
+                AuthCheck,
+                loading,
+                setLoading,
 
             }}>
             {children}

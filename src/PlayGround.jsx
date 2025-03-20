@@ -1,70 +1,33 @@
 import { Suspense, useEffect, useState } from "react";
 
 import { useLocation } from "react-router";
-import SidebarContextProvider from "./components/Sidebar/contexts/SidebarContextProvider";
+
 import { useAuth } from "./modules/Auth/contexts/features/useAuth";
-import GlobalDataContextProvider from "./modules/GlobalData/contexts/GlobalDataContextProvider";
+
 
 import { Progress } from "./components/ui/progress";
-import FiscalYearContextProvider from "./modules/FiscalYear/context/FiscalYearContextProvider";
-import UserFiscalYearContextProvider from "./modules/FiscalYear/context/UserFiscalYearContextProvider";
-import UserInitialValueDataContextProvider from "./modules/UserInitialValue/context/UserInitialValueDataContextProvider";
+
+import { AppContextProviders } from "./contexts/AppContextProvider";
 import GuestRouter from "./router/GuestRouter";
 import PrivateRouter from "./router/PrivateRouter";
 
 const PlayGround = () => {
-
-
-  const { isValidToken, AuthCheck, isGuest, loading, setLoading } = useAuth()
+  const { AuthCheck, isGuest, loading } = useAuth();
   const { pathname } = useLocation();
 
-
+  // Run authentication check when pathname changes
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setLoading(false);
-    }, 1500);
+    AuthCheck();
+  }, [pathname]);
 
-    // Cleanup function to clear the timeout
-    return () => clearTimeout(timeoutId);
-  }, []);
-  useEffect(() => {
-    AuthCheck()
-  }, [pathname])
+  if (loading) return <PageLoader />;
+
   return (
-    <>
-      {loading ?
-        <PageLoader />
-        :
-        <>
-
-          {isGuest ?
-            <Suspense fallback={<PageLoader />}>
-              <GuestRouter />
-            </Suspense>
-            :
-            <Suspense fallback={<PageLoader />}>
-              <UserInitialValueDataContextProvider>
-                <GlobalDataContextProvider>
-                  <UserFiscalYearContextProvider>
-
-                    <SidebarContextProvider>
-                      <FiscalYearContextProvider>
-
-                        <PrivateRouter />
-                      </FiscalYearContextProvider>
-                    </SidebarContextProvider>
-                  </UserFiscalYearContextProvider>
-                </GlobalDataContextProvider>
-              </UserInitialValueDataContextProvider>
-            </Suspense>
-          }
-        </>
-      }
-
-    </>
-  )
-
-}
+    <Suspense fallback={<PageLoader />}>
+      {isGuest ? <GuestRouter /> : <AppContextProviders><PrivateRouter /></AppContextProviders>}
+    </Suspense>
+  );
+};
 
 export default PlayGround
 

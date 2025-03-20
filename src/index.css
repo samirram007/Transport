@@ -56,16 +56,32 @@
         --chart-5: 340 75% 55%;
     }
 }
+
+  
+  
 @layer base {
+    @media (forced-colors: active) {
+        :root {
+          --tw-bg-opacity: 1;
+          background-color: black;
+          color: white;
+        }
+      }
+      @media (-ms-high-contrast: active) {
+        * {
+          all: unset !important;
+        }
+      }
     * {
         @apply m-0 p-0;
         box-sizing: border-box;
         font-size: 1rem;
-        @apply border-border;
+        @apply border-border; 
     }
-    body {
+    /* body {
         @apply bg-background text-foreground;
-    }
+    } */
+   
     .my-toast {
         min-height: 50px;
         padding: 0.3rem 0.7rem;

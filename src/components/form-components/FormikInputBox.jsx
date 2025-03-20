@@ -40,7 +40,7 @@ export const FormikInputBox = (
                     onChange={debouncedFormik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values[name]}
-                    readonly={props.readonly} 
+                    readOnly={props.readonly} 
                     className={`form-input-date    ${formik.errors[name] ? 'input-error' : ''}`} />
                 :
                 <Input
@@ -51,7 +51,7 @@ export const FormikInputBox = (
                     onChange={debouncedFormik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values[name]}
-                    readonly={props.readonly}
+                    readOnly={props.readonly}
                     disabled={props.disabled} 
                     className={`form-input    ${formik.errors[name] ? 'input-error' : ''}`}
                 />

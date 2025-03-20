@@ -100,7 +100,7 @@ const RecentFees = () => {
                 <div>
                   {item.rider.name}
                 </div>
-                <div className='flex flex-row gap-2 text-sm font-semibold text-pretty dark:text-blue-300 '>
+                <div className='flex flex-row gap-2 text-sm font-semibold text-nowrap dark:text-blue-300 '>
                   <div> {item.rider.standard}</div>
                   <div>Section: {item.rider.section}</div>
                   <div>Roll: {item.rider.rollNo ?? 'n/a'}</div>
