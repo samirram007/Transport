@@ -8,18 +8,19 @@ import { useMemo } from 'react';
 import { DateTime } from 'luxon';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
-import { Capitalize } from '../../../../../libs/utils';
+
+import { capitalizeWords } from '@/lib/removeEmptyStrings';
 import { useMonths } from '../../../../Common/hooks/queries';
 import { useMonthlyFeeCollectionReport } from '../../../hooks/queries';
 import MonthlyCollectionReportTable from '../MonthlyCollectionReportTable/MonthlyCollectionReportTable';
 
 const initialValues = {
-  academic_session_id: moment(new Date()).format('YYYY'),
-  academic_class_id: 10399,
+  fiscalYearId: moment(new Date()).format('YYYY'),
+  schooId: 10399,
 }
 const initialFilterValues = {
-  academic_session_id: initialValues.academic_session_id,
-  academic_class_id: initialValues.academic_class_id,
+  fiscalYearId: initialValues.fiscalYearId,
+  schooId: initialValues.schooId,
 }
 
 
@@ -73,21 +74,21 @@ const MonthlyDataTable = () => {
       accessorKey: 'student_name',
       className: 'pinned-left sticky left-0 bg-slate-800 border-r-2 border-b-[1px] border-violet-500 ',
       cell: info => {
-        const student = info.row.original
+        const rider = info.row.original
         return <>
-          <div className='text-blue-200 font-bold text-md cursor-pointer btn-link' onClick={() => { navigate(`/students/info/${student.id}`) }}>{student.student_name}</div>
-          {student &&
+          <div className='text-blue-200 font-bold text-md cursor-pointer btn-link' onClick={() => { navigate(`/students/info/${rider.id}`) }}>{rider.name}</div>
+          {rider &&
             <div className='flex flex-row gap-2  text-[8px]'>
               <span>
-                <span className='text-blue-400 font-bold'>{student.class}</span>
+                <span className='text-blue-400 font-bold'>{rider.standard}</span>
               </span>
               <span>
                 Section:
-                <span className='text-red-400 font-bold'>{student.section}</span>
+                <span className='text-red-400 font-bold'>{rider.section}</span>
               </span>
               <span>
                 Roll:
-                <span className='text-green-400 font-bold'>{student.roll_no}</span>
+                <span className='text-green-400 font-bold'>{rider.rollNo}</span>
               </span>
 
             </div>}
@@ -110,7 +111,7 @@ const MonthlyDataTable = () => {
         const getMonth = row.original.months.find(x => x.id === tab.id)
         if (getMonth?.amount === 0) {
           return <div className='text-center border-x-2 border-slate-400/10 text-gray-500 text-[11px]'>
-            <div className='text-gray-600 font-bold text-[14px]'>{Capitalize(getMonth?.short_name)} </div>
+            <div className='text-gray-600 font-bold text-[14px]'>{capitalizeWords(getMonth?.short_name)} </div>
             <div className='  text-[11px]'>{getMonth?.id <= moment(new Date()).format('M') ? <span className="text-red-500">Due</span> : ''}</div>
             {/* <div>{getMonth?.id}??{ moment(new Date()).format('M')} </div> */}
 

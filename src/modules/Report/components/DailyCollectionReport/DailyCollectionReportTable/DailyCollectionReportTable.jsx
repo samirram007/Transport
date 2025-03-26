@@ -12,9 +12,9 @@ import { useSearchParams } from 'react-router';
 
 import { TbFilterSearch } from "react-icons/tb";
 
-import Breadcrumb from '../../../../../components/Breadcrumb';
-import { useCustomRoutes } from '../../../../../hooks';
 
+
+import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
 import ExportToExcel from '../ExportToExcel/ExportToExcel';
 import FilterHead from '../FilterHead/FilterHead';
 
@@ -22,7 +22,7 @@ import FilterHead from '../FilterHead/FilterHead';
 
 export default function DailyCollectionReportTable({ data, columns, pageSize = 2000, fetchedData,
     mobileHeaders = ['id', 'name'], initialFilterValues }) {
-    const thisRoute = useCustomRoutes()
+
     const [sorting, setSorting] = useState([])
     // const { isOpen, setOpen } = useFormModal()
     const [filtering, setFiltering] = useState('');
@@ -67,7 +67,7 @@ export default function DailyCollectionReportTable({ data, columns, pageSize = 2
             <div className='flex flex-col justify-between gap-2 pb-2 border-b-2 row md:flex-row border-blue-300/10 '>
                 <div className='flex flex-col flex-1 gap-2 text-3xl'>
                     {/* {thisRoute} */}
-                    <Breadcrumb />
+                    <Breadcrumb pageName="daily Report" parentName="reports" type={"box"} />
 
                 </div>
                 <div className='flex flex-row items-start justify-center flex-1 gap-2'>

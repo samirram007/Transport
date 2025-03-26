@@ -1,10 +1,7 @@
 
-import { AcademicSessionSelect } from '../../../../Common/components/AcademicSessionSelect'
 
-import { FormikSubmit } from '@/components/form-components/FormikSubmit'
-import { useFormik } from 'formik'
-import { CampusAcademicClassSelect } from '../../../../Common/components/CampusAcademicClassSelect'
-import { SectionSelect } from '../../../../Common/components/SectionSelect'
+import { FormikSubmit } from '@/components/form-components/FormikSubmit';
+import { useFormik } from 'formik';
 
 const FilterHead = ({ initialFilterValues, fetchedData }) => {
 
@@ -33,18 +30,7 @@ const FilterHead = ({ initialFilterValues, fetchedData }) => {
                                 {/* <div className='col-span-1 font-bold text-md'>Filter</div> */}
 
 
-                                <div className='col-span-2 '>
 
-                                    <AcademicSessionSelect formik={formik} isCurrent={true} />
-
-                                </div>
-                                <div className='col-span-2 '>
-
-                                    <CampusAcademicClassSelect formik={formik} name='academic_class_id' label={'Class'} />
-                                </div>
-                                <div className='col-span-2'>
-                                    <SectionSelect formik={formik} />
-                                </div>
 
 
                                 {formik.values &&

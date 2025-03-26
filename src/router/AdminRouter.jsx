@@ -11,6 +11,7 @@ import { FeeHeads } from "@/pages/FeeHead";
 import { FiscalYears } from "@/pages/FiscalYear";
 import { IncomeGroups } from "@/pages/IncomeGroup";
 import { Organizations } from "@/pages/Organization";
+import { DailyCollectionReport, ExpenseReport, IncomeReport, MonthlyCollectionReport, Reports } from "@/pages/Report";
 import { Riders } from "@/pages/Rider";
 import { Schools } from "@/pages/School";
 import { Settings } from "@/pages/Settings";
@@ -48,6 +49,13 @@ const AdminRouter = () => {
           <Route index element={<Expenses />} />
           <Route path="process" element={<CreateExpense />} />
           <Route path="process/:id" element={<EditExpense />} />
+        </Route>
+        <Route path="reports">
+          <Route index element={<Reports />} />
+          <Route path="income_reports" element={<IncomeReport />} />
+          <Route path="expense_reports" element={<ExpenseReport />} />
+          <Route path="daily_collection_reports" element={<DailyCollectionReport />} />
+          <Route path="monthly_collection_reports" element={<MonthlyCollectionReport />} />
         </Route>
 
         <Route path="settings">

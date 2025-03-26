@@ -15,7 +15,7 @@ const DefaultLayout = () => {
     return (
         <div className="bg-slate-200  dark:bg-boxdark-2 dark:text-bodydark">
             {/* <!-- ===== Page Wrapper Start ===== --> */}
-            <div className="flex h-screen overflow-hidden ">
+            <div className="max-w-screen w-full relative flex  h-screen overflow-hidden ">
                 {/* <!-- ===== Sidebar Start ===== --> */}
                 <Sidebar />
                 {/* <!-- ===== Sidebar End ===== --> */}

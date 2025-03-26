@@ -11,7 +11,8 @@ import { useSearchParams } from 'react-router';
 
 import { TbFilterSearch } from "react-icons/tb";
 
-import Breadcrumb from '../../../../../components/Breadcrumb';
+
+import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
 import ExportToExcel from '../ExportToExcel/ExportToExcel';
 import FilterHead from '../FilterHead/FilterHead';
 
@@ -78,7 +79,8 @@ export default function MonthlyCollectionReportTable({ data, columns, pageSize =
             <div className='flex flex-col justify-between gap-2 pb-2 border-b-2 row md:flex-row border-blue-300/10 '>
                 <div className='flex flex-col flex-1 gap-2 text-3xl'>
 
-                    <Breadcrumb />
+                    <Breadcrumb pageName="monthly Report" parentName="reports" type={"box"} />
+
 
                 </div>
                 <div className='flex flex-row flex-1 gap-2'>
