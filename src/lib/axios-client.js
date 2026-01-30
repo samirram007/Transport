@@ -2,8 +2,6 @@ import axios from "axios";
 import { toast } from "sonner";
 
 
-
-
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 //console.clear()
@@ -13,8 +11,7 @@ const axiosClient = axios.create({
 // let ApiCallCount=0
 axiosClient.interceptors.request.use((config) => {
     const token = localStorage.getItem('ACCESS_TOKEN')
-    config.headers.Authorization = `Bearer ${token}`; // set in header
-
+    config.headers.Authorization = `Bearer ${token}`; 
     return config;
 },
     (error) => {
@@ -24,10 +21,12 @@ axiosClient.interceptors.request.use((config) => {
 
 axiosClient.interceptors.response.use(
     (response) => {
+
         return response
     },
     async (error) => {
         console.log("Hello ",error.response.data.message)
+        // return Promise.reject(error);
         const originalRequest = error.config;
 
         //   console.log(originalRequest._retry);

@@ -1,6 +1,6 @@
 import { useUserInitialValueDataContext } from "@/modules/UserInitialValue/context/features/useUserInitialValueDataContext";
 import moment from "moment";
-import { createContext, useMemo, useState } from "react";
+import { createContext, useState } from "react";
 
 import { useFees } from "../hooks/queries";
 
@@ -26,12 +26,11 @@ export const FeeDataContextProvider = ({ children }) => {
     }
     );
 
-
     const fetchedData = useFees(initialFilterValues);
     //console.log(fetchedData);
 
-    const mData = fetchedData.data?.data ?? [];
-    const data = useMemo(() => [...mData], [mData]);
+
+    const data = fetchedData.data ?? [];
 
     return (<FeeDataContext value={
         {

@@ -12,7 +12,7 @@ import mkcert from 'vite-plugin-mkcert';
 //     log: true, // logs render info to console (default: false)
 //   });
 // }
-const ReactCompilerConfig = { /* ... */ };
+// const ReactCompilerConfig = { /* ... */ };
 export default defineConfig({
 
   plugins: [
@@ -44,8 +44,14 @@ export default defineConfig({
     hmr: {
       overlay: true, // Disable the HMR overlay
     },
-    open: false
-
+    open: false,
+    // proxy: {
+    //   '/api': {
+    //     target: 'https://transport-api.local',
+    //     changeOrigin: true,
+    //     secure: false
+    //   }
+    // }
   },
   build: {
     outDir: 'dist', // Ensure correct output directory

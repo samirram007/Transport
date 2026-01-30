@@ -30,11 +30,11 @@ const FilterHead = ({ initialFilterValues, fetchedData }) => {
 
                         <form onSubmit={formik.handleSubmit} className='flex flex-row items-center justify-center flex-1 gap-2'>
                             <div className='grid grid-cols-12 gap-4 mb-2'>
-                                <div className='col-span-6 flex flex-row gap-2 pt-4 '>
+                                <div className='col-span-6 flex flex-row justify-start items-center gap-2 pt-4 '>
                                     <span>Period</span>
-                                    <FormikInputBox type="date" formik={formik} name="from" label="" />
+                                    <FormikInputBox type="date" semi formik={formik} name="from" label="" />
                                     <span>To</span>
-                                    <FormikInputBox type="date" formik={formik} name="to" label="" />
+                                    <FormikInputBox type="date" semi formik={formik} name="to" label="" />
                                     <FormikSubmit formik={formik} label={'Filter'} />
                                 </div>
                             </div>

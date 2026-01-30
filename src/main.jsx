@@ -15,10 +15,7 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <ThemeContextProvider  >
-
           <AuthContextProvider>
-
-
             <PlayGround />
             <Toaster richColors
               position="bottom-center"

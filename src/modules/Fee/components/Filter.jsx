@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
 
 const Filter = () => {
 
-    const { fetchedData, initialFilterValues, setInitialFilterValues } = useFeeDataContext()
+    const { initialFilterValues, setInitialFilterValues } = useFeeDataContext()
 
     //  console.log(initialFilterValues);
     // console.log(DateTime.fromISO(new Date().toLocaleString(DateTime.DATE_MED) ));
@@ -40,6 +40,7 @@ const Filter = () => {
         onSubmit: (values, { setSubmitting }) => {
             //  Object.assign(initialFilterValues, values);
             setSubmitting(false)
+            console.log(values);
             setInitialFilterValues(prev => ({ ...prev, ...values }))
 
 

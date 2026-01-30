@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { LuLoader } from 'react-icons/lu';
 
 import * as Yup from "yup";
@@ -9,20 +9,22 @@ import { FormikInputBox } from '@/components/form-components/FormikInputBox';
 
 import FormikDeleteForm from '@/components/form-components/FormikDeleteForm';
 import FormikSubmitPanel from '@/components/form-components/FormikSubmitPanel';
-import { SchoolSelect } from '@/modules/GlobalData/components/Selector/SchoolSelect';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { CardContent } from '@/components/ui/card';
+import { capitalizeFirstLetter } from '@/lib/removeEmptyStrings';
 import { toast } from 'sonner';
 import { useFeeHeads } from '../../FeeHead/hooks/queries';
 import { useFeeContext } from '../contexts/features/useFeeContext';
 import RiderSearchContextProvider from '../contexts/RiderSearchContextProvider';
 import SearchRider from './SearchRider';
 const validationSchema = Yup.object().shape({
-    total_amount: Yup.string()
+    totalAmount: Yup.string()
         .required("Amount is required"),
 })
 
 const EntryForm = () => {
     const { selectedFee: data, action } = useFeeContext()
-
+    console.log(data, action)
     return (
         data &&
             (action === 'delete') ?
@@ -55,14 +57,14 @@ const FormikForm = () => {
         enableReinitialize: true,
         onSubmit: (values, { setSubmitting }) => {
             // setIsProcessing(true)
-            const total_amount = values.fee_items.reduce((x, i) => x + parseFloat(i.total_amount), 0)
-            if (total_amount == 0) {
+            const totalAmount = values.feeItems.reduce((x, i) => x + parseFloat(i.totalAmount), 0)
+            if (totalAmount == 0) {
                 toast.info(<HTMLContent htmlString={'Please add some item'} />)
                 return
             }
-            values.total_amount = total_amount
-            values.paid_amount = total_amount
-            values.balance_amount = 0
+            values.totalAmount = totalAmount
+            values.paidAmount = totalAmount
+            values.balanceAmount = 0
             handleMutation(values)
                 .then(() => {
                     setModalOpen(false)
@@ -78,53 +80,115 @@ const FormikForm = () => {
     console.log('FormikForm', formik)
 
     return (
-        <div className='mx-auto w-100'>
+        <div className='mx-auto w-full max-w-4xl p-2'>
             <form onSubmit={formik.handleSubmit}>
                 <div className='grid grid-cols-1 '>
-                    <div className='grid grid-flow-row grid-cols-6 gap-5 md:grid-flow-col'>
-                        <div className='grid col-span-6 gap-4 px-4 pb-2 mb-2 '>
-                            <div className='grid grid-cols-12 gap-4 mb-2'>
-                                {/* <div className='col-span-1 font-bold text-md'>Filter</div> */}
-                                <div className='col-span-6 md:col-span-3 '>
-                                    <SchoolSelect formik={formik} />
+                    <div className='flex flex-row justify-between items-start mb-2'>
 
-
-                                </div>
-                                <div className='col-span-6 md:col-span-2 '>
-
-                                    {/* <FiscalYearSelect formik={formik} /> */}
-
-                                </div>
-                                <div className=' md:col-span-5'></div>
-                                <div className='flex flex-col items-center justify-end col-span-6 md:col-span-2 '>
-
-                                    <FormikInputBox formik={formik} type={"date"} extClass={'align-self-right'} name="feeDate" label="Date" />
-
-
-                                </div>
-
-
-                            </div>
+                        <RiderContent />
+                        <div>
+                            <FormikInputBox formik={formik} type={"text"} name="feeNo" label="Fee No." extClass={'text-right'} readOnly={true} />
+                            <FormikInputBox formik={formik} type={"date"} extClass={'text-right'} name="feeDate" label="Date" />
+                            <FormikInputBox formik={formik} type={"text"} name="paymentMode" label="Payment Mode" extClass={'text-right'} readOnly={true} disabled />
 
                         </div>
                     </div>
-                    <div className='flex flex-row justify-center'>
-                        <div className='badge badge-success'>Fees</div>
+                    <div className='flex flex-row justify-center '>
+                        <div className='badge badge-success hidden'>Fees Details</div>
                     </div>
-                    <div className='grid grid-cols-6 gap-5 px-4 pb-2 mb-2 border-b-2 border-blue-300/30'>
-                        <div className='col-span-4'>Particulars</div>
+                    <div className='grid grid-cols-10 gap-5 px-4 pb-2 mb-2 border-b-2 border-blue-300/30'>
+                        <div className='col-span-2'>Particulars</div>
+                        <div className='col-span-6'>Unit</div>
                         <div className='text-right'>Amount</div>
                         <div className='text-center'>Action</div>
                     </div>
-                    {/* <FeeItemNew formik={formik} changes={changes} setChanges={setChanges} />
 
-                    <FeeItems formik={formik} changes={changes} setChanges={setChanges} /> */}
+
+                    <FeeItems formik={formik} />
 
                 </div>
+                <div className='grid grid-cols-10 gap-5 px-4 pb-2 mb-2 border-b-2 border-blue-300/30'>
+                    <div className='col-span-2'></div>
+                    <div className='col-span-6 text-right'>Total: </div>
+                    <div className=' text-right'>{formik.values.totalAmount}</div>
+
+                    <div className='text-center'>...</div>
+                </div>
+                {/* <FormikInputBox formik={formik} type={"number"} name="paidAmount" label="Paid Amount" extClass={'text-right'} readOnly={true} /> */}
+                <FormikInputBox formik={formik} type={"text"} name="note" label="Note" extClass={'text-left'} readOnly={true} />
+                {/* <InfoRow label="Note" value={initialValues.note ?? 'N/A'} /> */}
                 <FormikSubmitPanel formik={formik} />
             </form>
         </div>
     )
+}
+
+const RiderContent = () => {
+    const { selectedFee: data } = useFeeContext()
+    return (
+        <CardContent className='flex flex-col items-start gap-4 p-0 pl-6 border-2 rounded-md shadow-md border-slate-600/50'>
+
+            <div className="flex min-w-full flex-col gap-2  items-start  max-h-[15rem] overflow-y-auto scrollbar-thin scrollbar-thumb-teal-500 scrollbar-track-teal-200">
+                <div className="flex items-start justify-between gap-3   pb-2">
+                    <div className="flex-1">
+                        <p className="text-lg font-semibold"><strong>Student</strong>
+                            <span>: </span>{data?.rider.name}</p>
+                        <p className="text-sm"><strong>School</strong>
+                            <span>: </span> {data?.rider.school?.name} ({capitalizeFirstLetter(data?.rider.schoolTime)})</p>
+                        <div className="w-full flex flex-row justify-between mt-0 text-sm gap-2">
+                            <div className="grid grid-cols-[40px_5px_1fr]">
+                                <strong>Code</strong>
+                                <span>: </span>
+                                <div>{capitalizeFirstLetter(data?.rider.code ?? 'n/a')}</div>
+                            </div>
+                            <div className="grid grid-cols-[40px_5px_1fr]">
+                                <strong>Class</strong>
+                                <span>: </span>
+                                <div>{capitalizeFirstLetter(data?.rider.standard)}</div>
+                            </div>
+                            <div className="grid grid-cols-[40px_5px_1fr]">
+                                <strong>Roll</strong>
+                                <span>: </span>
+                                <div>{data?.rider.rollNo}</div>
+                            </div>
+
+                        </div>
+                        <div className="grid grid-cols-[40px_5px_1fr] pb-2">
+                            <strong>Fee</strong>
+                            <span>:</span>
+                            <div>₹{data?.rider.monthlyCharge}</div>
+                        </div>
+                    </div>
+                    <Avatar className="shadow-lg w-14 h-14">
+                        <AvatarImage src={data?.rider.profileDocument?.path} alt={data?.rider.name} />
+                    </Avatar>
+
+                </div>
+
+
+                {/* <InfoRow label="DOB" value={moment(data.dob).format("DD-MM-YYYY")} />
+                  <InfoRow label="Address" value={data.address?.display} />
+                  <InfoRow label="Gender" value={upperCaseFirstLetter(data.gender)} />
+                  <InfoRow label="Nationality" value={upperCaseFirstLetter(data.nationality)} />
+                  <InfoRow label="Religion" value={upperCaseFirstLetter(data.religion)} />
+                  <InfoRow label="Caste" value={upperCaseFirstLetter(data.caste)} />
+                  <InfoRow label="Language" value={upperCaseFirstLetter(data.language)} />
+                  <InfoRow label="Aadhaar No." value={upperCase(data.aadhaarNo ?? 'n/a')} /> */}
+
+
+            </div>
+        </CardContent>
+    )
+}
+
+const InfoRow = ({ label, value }) => {
+    return (
+        <div className="text-sm text-gray-500 gap-1 grid grid-cols-[90px_5px_1fr]  ">
+            <div className='text-nowrap text-slate-500'>{label}</div>
+            <div> : </div>
+            <div className="pr-2 truncate whitespace-normal line-clamp-2 ">{value}</div>
+        </div>
+    );
 }
 const DeleteForm = () => {
 
@@ -159,20 +223,20 @@ const DeleteForm = () => {
 }
 
 
-export const FeeItems = ({ formik, changes, setChanges }) => {
-    const [feeItemsData, setFeeItemsData] = useState(formik.values.fee_items)
-    useEffect(() => {
-        setFeeItemsData(prev => formik.values.fee_items)
+export const FeeItems = ({ formik }) => {
+    const [feeItemsData, setFeeItemsData] = useState(formik.values.feeItems)
+    // useEffect(() => {
+    //     setFeeItemsData(prev => formik.values.feeItems)
 
-    }, [changes]);
-    // console.log(formik.values.fee_items);
+    // }, [changes]);
+    console.log("FormikFeeItems", formik.values.feeItems);
     return (
         <>
 
 
             {
-                feeItemsData && feeItemsData.map((fee_item, index) => (
-                    <FeeItemRow key={index} fee_item={fee_item} />
+                feeItemsData && feeItemsData.map((feeItem, index) => (
+                    <FeeItemRow key={index} feeItem={feeItem} />
                 ))
             }
 
@@ -181,15 +245,19 @@ export const FeeItems = ({ formik, changes, setChanges }) => {
     )
 }
 
-const FeeItemRow = ({ fee_item }) => {
+const FeeItemRow = ({ feeItem }) => {
+    console.log("feeItem", feeItem);
 
     return (
         <>
 
-            <div className='grid grid-cols-6 gap-5 px-4 pb-2 mb-2 border-b-2 border-blue-300/30'>
-                <div className='col-span-4'>{fee_item.fee_head.name}</div>
-                <div className='text-right'>{fee_item.total_amount}</div>
-                <div className='text-center'><button type="button">Edit</button></div>
+            <div className='grid grid-cols-10 gap-5 px-4 pb-2 mb-2 border-b-2 border-blue-300/30'>
+                <div className='col-span-2'>{feeItem.feeHead.name}</div>
+                <div className='col-span-6'><FeeMonths feeItemMonths
+                    ={feeItem.feeItemMonths
+                    } /></div>
+                <div className='text-right'>{feeItem.totalAmount}</div>
+                <div className='text-center'><button type="button">...</button></div>
             </div>
 
         </>
@@ -198,17 +266,32 @@ const FeeItemRow = ({ fee_item }) => {
 const HTMLContent = ({ htmlString }) => (
     <div dangerouslySetInnerHTML={{ __html: htmlString }} />
 );
+const FeeMonths = ({ feeItemMonths }) => {
+
+    return (
+        <div className='flex flex-row gap-2'>
+            {
+                feeItemMonths && feeItemMonths.map((item, index) => (
+                    <div key={index} className='badge badge-primary border border-green-500 px-2 py-1 rounded-xl badge-outline badge-sm'>{item.month.name} {item.year}</div>
+                ))
+            }
+
+            {/* Fee months content goes here */}
+        </div>
+    );
+};
+
 export const FeeItemNew = ({ formik, changes, setChanges }) => {
     const totalAmountRef = useRef()
     const feeHeadRef = useRef()
     const FeeHeadData = useFeeHeads();
     if (FeeHeadData.isLoading) return <LuLoader />;
-    // const initData={...formik.initialValues.fee_items[0], fee_head_id: '', amount: ''}
+    // const initData={...formik.initialValues.feeItems[0], feeHeadId: '', amount: ''}
 
 
 
     const addFee = () => {
-        const existingHead = formik.values.fee_items.find(x => x.fee_head_id == feeHeadRef.current.value)
+        const existingHead = formik.values.feeItems.find(x => x.feeHeadId == feeHeadRef.current.value)
 
         let errorString = ""
         if (existingHead) {
@@ -226,16 +309,16 @@ export const FeeItemNew = ({ formik, changes, setChanges }) => {
         }
 
         const initData = {
-            fee_head_id: parseFloat(feeHeadRef.current.value),
-            fee_head: FeeHeadData.data.data.find(x => x.id == feeHeadRef.current.value),
+            feeHeadId: parseFloat(feeHeadRef.current.value),
+            feeHead: FeeHeadData.data.data.find(x => x.id == feeHeadRef.current.value),
             quantity: 1,
             amount: parseFloat(totalAmountRef.current.value),
-            total_amount: parseFloat(totalAmountRef.current.value)
+            totalAmount: parseFloat(totalAmountRef.current.value)
         }
 
-        formik.values.fee_items.push(initData)
+        formik.values.feeItems.push(initData)
         setChanges(prev => prev + 1)
-        // console.log( formik.values.fee_items);
+        // console.log( formik.values.feeItems);
 
     }
     const handleDropdownChange = (event) => {
@@ -250,7 +333,7 @@ export const FeeItemNew = ({ formik, changes, setChanges }) => {
 
             <div className='grid grid-cols-12 gap-5 px-4 pb-2 mb-2 border-b-2 border-blue-300/30'>
                 <div className='col-span-4'>
-                    {/* <FormikInputBox formik={formik} type={"text"} name={`fee_items.particulars`} label="" /> */}
+                    {/* <FormikInputBox formik={formik} type={"text"} name={`feeItems.particulars`} label="" /> */}
                     {/* <input                className={`  input mb-0 input-bordered input-primary    ${formik.errors[name]? 'input-error' : ''}`}/> */}
                     <select ref={feeHeadRef}
                         onChange={handleDropdownChange}

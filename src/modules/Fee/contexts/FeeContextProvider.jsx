@@ -68,7 +68,7 @@ export const FeeContextProvider = ({ children, entryMode = 'create', selectedDat
 
     }
     const handleMutation = async (values, setSelectedMonths) => {
-
+        console.log("Mutate Values", values)
         if (action === 'create') {
             FeeStoreMutation.mutateAsync(values).then(() =>
 

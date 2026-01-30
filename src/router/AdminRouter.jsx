@@ -1,6 +1,5 @@
 import PageTitle from "@/components/PageTitle";
 import DefaultLayout from "@/layouts/DefaultLayout";
-import { AcademicClasses } from "@/pages/AcademicClass";
 import { Dashboard } from "@/pages/Dashboard";
 import { Designations } from "@/pages/Designation";
 import { CreateExpense, EditExpense, Expenses } from "@/pages/Expense";
@@ -68,7 +67,6 @@ const AdminRouter = () => {
 
           <Route path="designations" element={<Designations />} />
 
-          <Route path="academic_classes" element={<AcademicClasses />} />
 
           <Route path="fiscal_years" element={<FiscalYears />} />
           <Route path="income_groups" element={<IncomeGroups />} />

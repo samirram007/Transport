@@ -2,14 +2,14 @@ import { toast } from "sonner";
 import axiosClient from "./axios-client";
 import { removeEmptyStrings } from "./removeEmptyStrings";
 
-export const getData = async (apiPath) => {
-    return await axiosClient.get(apiPath)
-        .then((response) => {
-            //successHandler(response)
-            console.log(response)
+export const getData = (apiPath) => {
+
+    return axiosClient.get(apiPath)
+        .then((response) => { 
             return response.data;
         })
         .catch((err) => {
+            console.log('axios error', apiPath, err);
             errorHandler(err)
             throw err
         })

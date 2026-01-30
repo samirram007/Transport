@@ -6,10 +6,10 @@ export function fetchFeeService(id) {
 
     return getData(`${moduleApiPath}/${id}`)
 }
-export function fetchFeesService(payload) {
-    const filterString = `fiscalYearId=${payload.fiscalYearId}&from=${payload.from}&to=${payload.to}`
-
+export async function fetchFeesService(payload) {
+    const filterString = `fiscalYearId=${payload.fiscalYearId}`
     return getData(`${moduleApiPath}?${filterString}`)
+
 
 }
 export function fetchSearchRiderForFeesService(payload) {
